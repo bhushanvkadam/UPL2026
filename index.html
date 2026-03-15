@@ -1045,9 +1045,66 @@ function renderPoints(){
     sec.innerHTML=`<div class="pts-group-pill">${g}</div><div class="pts-card"><table class="pts-table"><thead><tr><th>Team</th><th>P</th><th>W</th><th>L</th><th>Pts</th><th>NRR</th></tr></thead><tbody>${rowsHtml}</tbody></table></div><div style="font-size:0.68rem;color:var(--gray);margin-top:0.35rem;padding-left:0.2rem;"><span style="background:#dcfce7;color:#166534;padding:0.1rem 0.35rem;border-radius:4px;margin-right:0.35rem;">✓ Q</span>Qualified <span style="background:#fee2e2;color:#991b1b;padding:0.1rem 0.35rem;border-radius:4px;margin:0 0.35rem;">✗ E</span>Eliminated (confirmed only)</div>`;
     pc.appendChild(sec);
   });
+  // ── Knockout Stage card ─────────────────────────────────────────────
   const koSec=document.createElement('div');koSec.className='pts-section';
   const sfm=STATE.matches.filter(m=>m.isFinal);
-  koSec.innerHTML=`<div class="pts-group-pill">Knockout Stage</div><div class="ko-card">${sfm.map(k=>`<div class="ko-row"><div class="ko-label-row">${k.label}</div><div class="ko-teams"><div class="t-name">${k.team1}</div><div class="match-center"><span class="vs-text">${k.winner?'→':'VS'}</span>${k.winner?`<span style="font-size:0.68rem;color:var(--green-light);font-weight:600;">${k.winner}</span>`:''}</div><div class="t-name right">${k.team2}</div></div></div>`).join('')}</div>`;
+  const sf=sfm.filter(m=>m.label.includes('Semi'));
+  const fin=sfm.find(m=>m.label.includes('FINAL')&&!m.label.includes('Semi'));
+  const finWinner=fin&&fin.winner||'';
+
+  const koMatchRow=(k)=>{
+    const isDone=k.status==='completed'&&k.winner;
+    const isLive=k.status==='live';
+    const isFin=k.label.includes('FINAL')&&!k.label.includes('Semi');
+    const teamCfg1=TEAM_CONFIG.find(t=>t.name===k.team1)||{icon:'',color:'#374151'};
+    const teamCfg2=TEAM_CONFIG.find(t=>t.name===k.team2)||{icon:'',color:'#374151'};
+    const teamPill=(name,cfg,isWinner)=>{
+      if(!name||name==='TBD')return`<div style="flex:1;padding:.55rem .75rem;border-radius:10px;background:#f1f5f9;border:1.5px solid #e2e8f0;"><span style="font-size:.72rem;color:#94a3b8;font-weight:500;">TBD</span></div>`;
+      return`<div style="flex:1;padding:.55rem .75rem;border-radius:10px;background:${isWinner?cfg.color:'white'};border:1.5px solid ${isWinner?cfg.color:'#e2e8f0'};display:flex;align-items:center;gap:.4rem;transition:all .2s;">
+        <span style="font-size:.85rem;">${cfg.icon||''}</span>
+        <span style="font-size:.88rem;font-weight:${isWinner?700:600};color:${isWinner?'white':'#1c1917'};">${name}</span>
+        ${isWinner?'<span style="margin-left:auto;font-size:.72rem;color:rgba(255,255,255,.8);font-weight:600;">✓ Won</span>':''}
+      </div>`;
+    };
+    const vsOrArrow=isDone
+      ?`<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:0 .25rem;"><div style="font-size:.65rem;color:#94a3b8;">→</div></div>`
+      :`<div style="flex-shrink:0;padding:0 .4rem;font-size:.7rem;font-weight:700;color:#94a3b8;">VS</div>`;
+    const statusPill=isDone
+      ?`<span style="font-size:.62rem;font-weight:700;background:#dcfce7;color:#166534;padding:.12rem .5rem;border-radius:999px;">Done</span>`
+      :isLive
+      ?`<span style="font-size:.62rem;font-weight:700;background:#fee2e2;color:#991b1b;padding:.12rem .5rem;border-radius:999px;animation:blink 1.4s infinite;">🔴 Live</span>`
+      :`<span style="font-size:.62rem;font-weight:700;background:#fef3c7;color:#92400e;padding:.12rem .5rem;border-radius:999px;">Upcoming</span>`;
+    const resultLine=isDone&&k.result?`<div style="font-size:.72rem;color:var(--green-light);font-weight:600;margin-top:.4rem;padding:.3rem .5rem;background:#f0fdf4;border-radius:6px;">${k.result}</div>`:'';
+    return`<div style="padding:.75rem 1rem;border-bottom:1px solid var(--border);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);">${k.label}</div>
+        ${statusPill}
+      </div>
+      <div style="display:flex;align-items:center;gap:.4rem;">
+        ${teamPill(k.team1,teamCfg1,isDone&&k.winner===k.team1)}
+        ${vsOrArrow}
+        ${teamPill(k.team2,teamCfg2,isDone&&k.winner===k.team2)}
+      </div>
+      ${resultLine}
+    </div>`;
+  };
+
+  // Champion banner
+  const champBanner=finWinner?`
+    <div style="background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);padding:1.25rem 1rem;text-align:center;border-radius:0 0 14px 14px;">
+      <div style="font-size:2.5rem;margin-bottom:.35rem;">🏆</div>
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#fde68a;margin-bottom:.2rem;">Tournament Champion</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#fef9c3;letter-spacing:-.01em;">${finWinner}</div>
+      <div style="font-size:.72rem;color:rgba(253,230,138,.65);margin-top:.35rem;">${fin&&fin.result||''}</div>
+    </div>`:'';
+
+  koSec.innerHTML=`
+    <div class="pts-group-pill">Knockout Stage</div>
+    <div class="ko-card" style="overflow:hidden;">
+      ${sf.map(k=>koMatchRow(k)).join('')}
+      ${fin?koMatchRow(fin):''}
+      ${champBanner}
+    </div>`;
   pc.appendChild(koSec);
   // Bracket removed from points page
 }
