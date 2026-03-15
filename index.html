@@ -1049,11 +1049,7 @@ function renderPoints(){
   const sfm=STATE.matches.filter(m=>m.isFinal);
   koSec.innerHTML=`<div class="pts-group-pill">Knockout Stage</div><div class="ko-card">${sfm.map(k=>`<div class="ko-row"><div class="ko-label-row">${k.label}</div><div class="ko-teams"><div class="t-name">${k.team1}</div><div class="match-center"><span class="vs-text">${k.winner?'→':'VS'}</span>${k.winner?`<span style="font-size:0.68rem;color:var(--green-light);font-weight:600;">${k.winner}</span>`:''}</div><div class="t-name right">${k.team2}</div></div></div>`).join('')}</div>`;
   pc.appendChild(koSec);
-  // Tournament bracket
-  const bracketEl=document.createElement('div');
-  bracketEl.style.marginTop='1rem';
-  bracketEl.innerHTML=renderBracket();
-  pc.appendChild(bracketEl);
+  // Bracket removed from points page
 }
 
 /* ══ RENDER: TEAMS ════════════════════════════════════════════════════════ */
@@ -1456,8 +1452,8 @@ function renderMatchDetail(){
           if(b.type==='wicket'){cls='ball-w';lbl='W';}
           else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
           else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-          else if(b.type==='bye'){cls='ball-dot';lbl='B';}
-          else if(b.type==='legbye'){cls='ball-dot';lbl='LB';}
+          else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
+          else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
           else if(b.runs===4){cls='ball-4';lbl='4';}
           else if(b.runs===6){cls='ball-6';lbl='6';}
           else if(b.runs>0){cls='ball-1';lbl=b.runs;}
@@ -2076,8 +2072,8 @@ function renderScorer(){
     if(b.type==='wicket'){cls='ball-w';lbl='W';}
     else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
     else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-    else if(b.type==='bye'){cls='ball-dot';lbl='B';}
-    else if(b.type==='legbye'){cls='ball-dot';lbl='LB';}
+    else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
+    else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
     else if(b.runs===4){cls='ball-4';lbl='4';}
     else if(b.runs===6){cls='ball-6';lbl='6';}
     else if(b.runs>0){cls='ball-'+Math.min(b.runs,3);lbl=b.runs;}
@@ -2235,10 +2231,10 @@ function renderOverDone(body,m,inn){
   const bowlTeam=getInn().team===m.team1?m.team2:m.team1;
   const bowlSquad=STATE.squads.find(s=>s.team===bowlTeam)||makeSquad(bowlTeam);
   const allBowlers=bowlSquad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
-  // FIX 1a: exclude bowler who just bowled
+  // Exclude bowler who just bowled from next over list (fully removed, not just disabled)
   const lastOverBowler=inn.bowler||'';
-  const bowlers=allBowlers.filter(p=>p!==lastOverBowler);
-  const bowlOpts=allBowlers.map(p=>`<option value="${p}"${p===lastOverBowler?' disabled style="color:#6b7280"':''}>${p}${p===lastOverBowler?' (just bowled)':''}</option>`).join('');
+  const availBowlers=allBowlers.filter(p=>p!==lastOverBowler);
+  const bowlOpts=availBowlers.map(p=>`<option value="${p}">${p}</option>`).join('');
   // Over summary for this over
   const ovSumm=overSummary(inn);const lastOv=ovSumm[ovSumm.length-1];
   const lastOvBalls=lastOv?lastOv.balls.map(b=>{
@@ -2246,8 +2242,8 @@ function renderOverDone(body,m,inn){
     if(b.type==='wicket'){cls='ball-w';lbl='W';}
     else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
     else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-    else if(b.type==='bye'){cls='ball-dot';lbl='B';}
-    else if(b.type==='legbye'){cls='ball-dot';lbl='LB';}
+    else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
+    else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
     else if(b.runs===4){cls='ball-4';lbl='4';}
     else if(b.runs===6){cls='ball-6';lbl='6';}
     else if(b.runs>0){cls='ball-1';lbl=b.runs;}
