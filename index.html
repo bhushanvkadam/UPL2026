@@ -14,11 +14,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
 .hero{background:var(--green);color:white;text-align:center;padding:2rem 1.5rem 1.5rem;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;top:-60px;left:-60px;width:200px;height:200px;border-radius:50%;border:40px solid rgba(255,255,255,0.05);pointer-events:none;}
 .hero::after{content:'';position:absolute;bottom:-80px;right:-40px;width:280px;height:280px;border-radius:50%;border:50px solid rgba(255,255,255,0.04);pointer-events:none;}
-.organiser{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;margin-bottom:0.4rem;}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,4.5vw,2.4rem);font-weight:900;line-height:1.15;}
-.hero h1 .sub{display:block;font-size:clamp(0.8rem,2.5vw,1.1rem);opacity:0.7;font-weight:700;margin-top:0.25rem;}
-.hero-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:1rem;}
+.organiser{font-size:1rem;letter-spacing:.02em;font-weight:600;opacity:.9;margin-bottom:.1rem;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.45rem,5vw,2.5rem);font-weight:900;line-height:1.15;letter-spacing:-.01em;}
+
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.35rem;margin:.6rem 0 .75rem;font-size:.75rem;opacity:.7;font-weight:500;}
+.hero-meta-sep{opacity:.35;}
+.hero-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:.25rem;}
 .badge{display:inline-flex;align-items:center;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.9);font-size:0.75rem;font-weight:500;padding:0.28rem 0.8rem;border-radius:999px;}
+.wa-share-btn{display:inline-flex;align-items:center;gap:.4rem;background:#25d366;color:white;border:none;border-radius:999px;padding:.35rem 1rem;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.75rem;transition:background .15s;}
+.wa-share-btn:active{background:#128c7e;}
 .badge.gold{background:var(--gold);border-color:var(--gold-light);color:#fef9c3;}
 .tabs{display:flex;justify-content:center;gap:0.35rem;background:var(--green-mid);padding:0.65rem 0.75rem;flex-wrap:wrap;position:sticky;top:0;z-index:100;}
 .tab-btn{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);border:none;padding:0.4rem 0.85rem;border-radius:999px;font-size:0.8rem;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.18s;}
@@ -29,11 +33,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
 .skeleton{background:#e5e7eb;border-radius:10px;height:75px;margin-bottom:0.65rem;animation:shimmer 1.2s infinite;}
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:0.5}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes milestoneIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes milestoneOut{from{opacity:1}to{opacity:0;transform:translateX(-50%) translateY(-8px)}}
+#milestone-banner{animation:milestoneIn .4s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* MATCH CARDS */
 .match-card{background:white;border-radius:14px;border:1px solid var(--border);padding:0.95rem 1.1rem;margin-bottom:0.65rem;box-shadow:0 2px 6px rgba(0,0,0,0.05);animation:fadeIn 0.25s ease;}
 .match-card.is-final{border:2px solid #d97706;background:#fffbeb;}
+.match-card.is-final.is-the-final{border:2px solid #ca8a04;background:linear-gradient(135deg,#fefce8 0%,#fef9c3 50%,#fef3c7 100%);box-shadow:0 4px 16px rgba(202,138,4,.18);}
+.match-card.is-the-final .match-meta{color:#78350f;font-size:.75rem;}
+.match-card.is-the-final .t-name{font-size:1.05rem;font-weight:700;}
 .match-card.is-live{border:2px solid #ef4444;}
 .match-meta{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);margin-bottom:0.55rem;}
 .match-card.is-final .match-meta{color:#92400e;}
@@ -380,16 +390,24 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
 </style>
 </head>
 <body>
-<div class="sync-bar"><span class="sync-dot"></span>Live · Updated after every ball</div>
+<div class="sync-bar"><span class="sync-dot"></span><span id="sync-bar-text">Live · Updated after every ball</span></div>
 <div class="hero">
-  <div class="organiser" style="font-size:.92rem;opacity:.85;font-weight:500;margin-bottom:.5rem;">उत्कर्ष कला, क्रीडा व सांस्कृतिक मंडळ · आयोजित</div>
-  <h1>गावमर्यादित क्रिकेट स्पर्धा 2026<span class="sub" style="font-size:clamp(.75rem,2.2vw,1rem);opacity:.65;">Naneli, Dhepgalu · 16 March 2026</span></h1>
-  <div class="hero-badges">
-    <span class="badge">📅 16 March 2026</span>
-    <span class="badge">📍 Naneli, Dhepgalu · Mangaon, Kudal</span>
-    <span class="badge">⏱️ 4 Overs</span>
-    <span class="badge gold">🏆 ₹3,001 + Trophy</span>
+  <div class="organiser">उत्कर्ष कला, क्रीडा व सांस्कृतिक मंडळ</div>
+  <div style="font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin-bottom:.6rem;font-weight:500;">आयोजित</div>
+  <h1>गावमर्यादित क्रिकेट स्पर्धा 2026</h1>
+  <div class="hero-meta">
+    <span>📍 Naneli, Dhepgalu · Mangaon, Kudal</span>
+    <span class="hero-meta-sep">·</span>
+    <span>📅 16 March 2026</span>
+    <span class="hero-meta-sep">·</span>
+    <span>⏱ 4 Overs</span>
   </div>
+  <div class="hero-badges">
+    <span class="badge gold">🏆 ₹3,001 + Trophy</span>
+    <span class="badge">🥈 ₹2,001 + Trophy</span>
+    <span class="badge" style="background:rgba(255,255,255,.08);">6 Teams · 2 Groups</span>
+  </div>
+
 </div>
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('matches',this)">Matches</button>
@@ -400,12 +418,9 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
 </div>
 <div class="main">
   <div id="tab-matches" class="section active">
-    <div style="display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap;">
-      <button class="filter-btn active" id="mtab-live" onclick="switchMatchTab('live',this)">🔴 Live & Upcoming</button>
-      <button class="filter-btn" id="mtab-results" onclick="switchMatchTab('results',this)">✅ Results</button>
-    </div>
     <div id="matches-container"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
-    <div id="results-container" style="display:none;"></div>
+    <div id="results-container"></div>
+    <div id="mini-pts-widget" style="margin-top:1rem;"></div>
   </div>
   <div id="tab-points" class="section">
     <div class="section-title">Points Table</div>
@@ -462,6 +477,11 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
 
 
 <!-- PER-BALL SCORER PAGE -->
+<!-- Milestone banner -->
+<div id="milestone-banner" style="display:none;position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#1c1917;color:#fbbf24;padding:.55rem 1.2rem;border-radius:999px;font-size:.85rem;font-weight:700;z-index:500;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);"></div>
+<!-- Scorer alert bar -->
+<div id="sc-alert" style="display:none;position:sticky;top:52px;z-index:200;padding:.4rem .9rem;font-size:.75rem;font-weight:600;text-align:center;"></div>
+
 <div class="scorer-page" id="scorer-page">
   <div class="sc-hdr">
     <button class="sc-hdr-back" onclick="closeScorer()">←</button>
@@ -492,8 +512,8 @@ const BIN_URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const ADMIN_PASS="0308";
 const MAX_OVERS=4;         // ← change this to update overs for all matches
 const MAX_WICKETS=10;
-const MIN_BALLS_BAT=6;
-const MIN_OVERS_BOWL=1;
+const MIN_BALLS_BAT=10;
+const MIN_OVERS_BOWL=2;
 
 /* ══ TEAM CONFIG ══════════════════════════════════════════════════════════ */
 const TEAM_CONFIG=[
@@ -881,17 +901,14 @@ function renderMatches(){
   const live=STATE.matches.filter(m=>m.status==='live');
   const upcoming=STATE.matches.filter(m=>m.status==='upcoming');
   const completed=STATE.matches.filter(m=>m.status==='completed');
-
-  // Build a play-order sequence number based on when each match was started
-  // Matches that have balls = played; order by first ball existence
   const playedMatches=STATE.matches.filter(m=>m.status!=='upcoming'||(m.innings&&m.innings[0]&&m.innings[0].balls&&m.innings[0].balls.length>0));
   const playSeq={};
   playedMatches.forEach((m,i)=>{ playSeq[STATE.matches.indexOf(m)]=i+1; });
-  let playCount=0;
 
   const makeCard=(m,idx)=>{
     const div=document.createElement('div');
-    div.className='match-card'+(m.isFinal?' is-final':'')+(m.status==='live'?' is-live':'');
+    const isTheFinal=m.isFinal&&m.label.includes('FINAL')&&!m.label.includes('Semi');
+    div.className='match-card'+(m.isFinal?' is-final':'')+(isTheFinal?' is-the-final':'')+(m.status==='live'?' is-live':'');
     const i0=m.innings&&m.innings[0];
     const i1=m.innings&&m.innings[1];
     const inn1Started=i1&&Array.isArray(i1.balls)&&i1.balls.length>0;
@@ -947,28 +964,38 @@ function renderMatches(){
     return div;
   };
 
-  // Render live + upcoming in main matches tab
+  // Live + upcoming at top
   if(!live.length&&!upcoming.length){
-    mc.innerHTML='<div style="text-align:center;padding:2rem;color:var(--gray);font-size:.88rem;">No live or upcoming matches.</div>';
-  }
-  [...live,...upcoming].forEach(m=>{
-    const idx=STATE.matches.indexOf(m);
-    mc.appendChild(makeCard(m,idx));
-  });
-
-  // Render completed in results tab
-  if(rc){
-    if(!completed.length){
-      rc.innerHTML='<div style="text-align:center;padding:2rem;color:var(--gray);font-size:.88rem;">No completed matches yet.</div>';
-    }
-    completed.forEach(m=>{
+    mc.innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--gray);font-size:.88rem;">All matches complete. See results below.</div>';
+  } else {
+    [...live,...upcoming].forEach(m=>{
       const idx=STATE.matches.indexOf(m);
-      rc.appendChild(makeCard(m,idx));
+      mc.appendChild(makeCard(m,idx));
     });
   }
+  // Completed below — with a clear header
+  if(rc){
+    if(completed.length){
+      rc.innerHTML=`<div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--green);margin:1.2rem 0 .75rem;padding-bottom:.35rem;border-bottom:3px solid #d97706;display:inline-block;">Results</div>`;
+      completed.forEach(m=>{
+        const idx=STATE.matches.indexOf(m);
+        rc.appendChild(makeCard(m,idx));
+      });
+    } else {
+      rc.innerHTML='';
+    }
+  }
+  // Mini points widget
+  renderMiniPtsWidget();
 }
 
 /* ══ RENDER: POINTS ═══════════════════════════════════════════════════════ */
+function toggleNRR(id){
+  const row=document.getElementById(id);
+  if(!row)return;
+  row.style.display=row.style.display==='none'?'table-row':'none';
+}
+
 function renderPoints(){
   const pc=document.getElementById('points-container');
   pc.innerHTML='';
@@ -982,7 +1009,26 @@ function renderPoints(){
       const nrrStr=r.NRR>=0?`+${r.NRR.toFixed(3)}`:r.NRR.toFixed(3);
       const zonePill=r.zone==='q'?`<span class="zone-pill zone-q">✓ Q</span>`:r.zone==='e'?`<span class="zone-pill zone-e">✗ E</span>`:'';
       const rowClass=r.zone==='q'?'qualified':r.zone==='e'?'danger':'';
-      return`<tr class="${rowClass}"><td><span class="rank-badge ${rc[i]||'r3'}">${i+1}</span><strong>${r.team}</strong>${zonePill}</td><td>${r.P}</td><td>${r.W}</td><td>${r.L}</td><td class="pts-val">${r.Pts}</td><td class="${r.NRR>=0?'nrr-pos':'nrr-neg'}">${r.P>0?nrrStr:'—'}</td></tr>`;
+      // NRR breakdown tooltip — shown inline below row when clicked
+      const ovFor=oversDecToStr(r.oversFor);
+      const ovAg=oversDecToStr(r.oversAgainst);
+      const rpoFor=r.oversFor>0?(r.runsFor/r.oversFor).toFixed(3):'0.000';
+      const rpoAg=r.oversAgainst>0?(r.runsAgainst/r.oversAgainst).toFixed(3):'0.000';
+      const nrrId=`nrr-detail-${r.team.replace(/\s/g,'_')}`;
+      return`<tr class="${rowClass}"><td><span class="rank-badge ${rc[i]||'r3'}">${i+1}</span><strong>${r.team}</strong>${zonePill}</td><td>${r.P}</td><td>${r.W}</td><td>${r.L}</td><td class="pts-val">${r.Pts}</td><td class="${r.NRR>=0?'nrr-pos':'nrr-neg'}" style="cursor:pointer;text-decoration:underline dotted;" onclick="toggleNRR('${nrrId}')" title="Tap to see NRR breakdown">${r.P>0?nrrStr:'—'}</td></tr>
+      <tr id="${nrrId}" style="display:none;"><td colspan="6" style="padding:.5rem .75rem;background:#f8fafc;font-size:.72rem;color:#374151;border-top:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+          <div style="background:#dcfce7;border-radius:6px;padding:.4rem .6rem;">
+            <div style="font-weight:700;color:#166534;font-size:.68rem;text-transform:uppercase;margin-bottom:.2rem;">Runs Scored</div>
+            <div><strong>${r.runsFor}</strong> in <strong>${ovFor}</strong> ov = <strong>${rpoFor}</strong> RPO</div>
+          </div>
+          <div style="background:#fee2e2;border-radius:6px;padding:.4rem .6rem;">
+            <div style="font-weight:700;color:#991b1b;font-size:.68rem;text-transform:uppercase;margin-bottom:.2rem;">Runs Conceded</div>
+            <div><strong>${r.runsAgainst}</strong> in <strong>${ovAg}</strong> ov = <strong>${rpoAg}</strong> RPO</div>
+          </div>
+        </div>
+        <div style="margin-top:.4rem;font-size:.7rem;color:#64748b;">NRR = ${rpoFor} − ${rpoAg} = <strong style="color:${r.NRR>=0?'#16a34a':'#dc2626'};">${nrrStr}</strong></div>
+      </td></tr>`;
     }).join('');
     sec.innerHTML=`<div class="pts-group-pill">${g}</div><div class="pts-card"><table class="pts-table"><thead><tr><th>Team</th><th>P</th><th>W</th><th>L</th><th>Pts</th><th>NRR</th></tr></thead><tbody>${rowsHtml}</tbody></table></div><div style="font-size:0.68rem;color:var(--gray);margin-top:0.35rem;padding-left:0.2rem;"><span style="background:#dcfce7;color:#166534;padding:0.1rem 0.35rem;border-radius:4px;margin-right:0.35rem;">✓ Q</span>Qualified <span style="background:#fee2e2;color:#991b1b;padding:0.1rem 0.35rem;border-radius:4px;margin:0 0.35rem;">✗ E</span>Eliminated (confirmed only)</div>`;
     pc.appendChild(sec);
@@ -991,6 +1037,11 @@ function renderPoints(){
   const sfm=STATE.matches.filter(m=>m.isFinal);
   koSec.innerHTML=`<div class="pts-group-pill">Knockout Stage</div><div class="ko-card">${sfm.map(k=>`<div class="ko-row"><div class="ko-label-row">${k.label}</div><div class="ko-teams"><div class="t-name">${k.team1}</div><div class="match-center"><span class="vs-text">${k.winner?'→':'VS'}</span>${k.winner?`<span style="font-size:0.68rem;color:var(--green-light);font-weight:600;">${k.winner}</span>`:''}</div><div class="t-name right">${k.team2}</div></div></div>`).join('')}</div>`;
   pc.appendChild(koSec);
+  // Tournament bracket
+  const bracketEl=document.createElement('div');
+  bracketEl.style.marginTop='1rem';
+  bracketEl.innerHTML=renderBracket();
+  pc.appendChild(bracketEl);
 }
 
 /* ══ RENDER: TEAMS ════════════════════════════════════════════════════════ */
@@ -1206,6 +1257,14 @@ let DETAIL_IDX=null;
 function openMatchDetail(idx){
   DETAIL_IDX=idx;
   _adminDetailMode=false; // public view — never show admin controls
+  _openMatchDetailCore(idx);
+}
+function openMatchDetailAdmin(idx){
+  DETAIL_IDX=idx;
+  _adminDetailMode=isAdminLoggedIn(); // admin view — show POTM edit + ball editor
+  _openMatchDetailCore(idx);
+}
+function _openMatchDetailCore(idx){
   const m=STATE.matches[idx];
   if(!m){return;}
   if(!m.innings||m.innings.length<2){
@@ -1214,7 +1273,7 @@ function openMatchDetail(idx){
       {team:m.team2,balls:[],batters:[null,null],initBatters:[null,null],bowler:'',done:false}
     ];
   }
-  sessionStorage.setItem('md_idx',idx); // FIX 6: persist for refresh
+  sessionStorage.setItem('md_idx',idx);
   document.getElementById('md-label').textContent=m.label;
   document.getElementById('md-teams').textContent=`${m.team1} vs ${m.team2}`;
   renderMatchDetail();
@@ -1222,7 +1281,6 @@ function openMatchDetail(idx){
   document.body.style.overflow='hidden';
   document.getElementById('md-body').scrollTop=0;
   document.getElementById('match-detail-page').scrollTop=0;
-  // FIX 6: auto-refresh detail page every 15s when open
   clearInterval(_mdRefreshTimer);
   _mdRefreshTimer=setInterval(()=>{
     if(document.getElementById('match-detail-page').classList.contains('visible')){
@@ -1407,7 +1465,7 @@ function renderMatchDetail(){
         else if(s.out){dismissalStr='out';}
         const strikerDot=isCurrent&&currentBatters[0]===name?'<span style="display:inline-block;width:6px;height:6px;background:#4ade80;border-radius:50%;margin-right:4px;"></span>':'';
         return`<tr${s.out?' style="opacity:.55"':''}>
-          <td>${strikerDot}${name}${s.out?'<div style="font-size:.62rem;color:var(--gray);margin-top:.1rem;">† '+dismissalStr+'</div>':''}</td>
+          <td><span onclick="openPlayerProfile('${name}','${batTeam}')" style="cursor:pointer;text-decoration:underline dotted;color:inherit;">${strikerDot}${name}</span>${s.out?'<div style="font-size:.62rem;color:var(--gray);margin-top:.1rem;">† '+dismissalStr+'</div>':''}</td>
           <td><strong>${s.runs}</strong></td><td>${s.balls}</td><td>${s.fours}</td><td>${s.sixes}</td>
           <td style="color:var(--green-light);font-weight:600;">${sr}</td></tr>`;
       };
@@ -1590,8 +1648,28 @@ function renderMatchDetail(){
     </div>`;
   }
 
+  // Add share button + batting graph to scorecardHtml
+  const m2=STATE.matches[DETAIL_IDX];
+  if(m2){
+    // Batting graphs for each innings
+    [0,1].forEach(ii=>{
+      const inn=m2.innings[ii];
+      if(inn&&inn.balls.length>=6){
+        const g=buildRunGraph(inn);
+        if(g){
+          scorecardHtml+=`<div style="padding:.5rem .9rem .75rem;"><div style="font-size:.65rem;color:var(--gray);text-transform:uppercase;font-weight:700;margin-bottom:.35rem;">${inn.team} Run Rate by Over</div>${g}</div>`;
+        }
+      }
+    });
+    // Share button at bottom of scorecard
+    scorecardHtml+=`<div style="padding:.65rem .9rem;border-top:1px solid var(--border);">
+      <button onclick="shareMatchOnWhatsApp(${DETAIL_IDX})" style="width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;background:#25d366;color:white;border:none;border-radius:10px;padding:.6rem;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.522 5.847L.057 23.882l6.197-1.444A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.66-.488-5.196-1.343l-.372-.214-3.862.9.943-3.741-.235-.382A9.936 9.936 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Share on WhatsApp
+      </button>
+    </div>`;
+  }
   document.getElementById('md-body').innerHTML=html;
-  // Inject scorecard content into the toggle div
   const scDiv=document.getElementById('dv-scorecard-content');
   if(scDiv)scDiv.innerHTML=scorecardHtml;
 }
@@ -1808,6 +1886,7 @@ function renderAdminList(){
         </select>
       </div>
       <span class="aml-status ${sc}">${st}</span>
+      ${m.status==='completed'?`<button onclick="event.stopPropagation();openMatchDetailAdmin(${idx})" style="background:#e0f2fe;color:#0369a1;border:none;border-radius:6px;padding:.25rem .55rem;font-size:.68rem;font-weight:700;cursor:pointer;margin-left:.4rem;font-family:'DM Sans',sans-serif;">⭐ POTM</button>`:''}
       <button onclick="event.stopPropagation();resetMatch(${idx})" style="background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:.25rem .55rem;font-size:.68rem;font-weight:700;cursor:pointer;margin-left:.4rem;font-family:'DM Sans',sans-serif;">Reset</button>
       <span style="color:var(--gray);font-size:1rem;margin-left:.3rem;">›</span>
     </div>${koTeamSelectors}`;
@@ -2167,6 +2246,7 @@ function renderOverDone(body,m,inn){
       <div class="sc-setup-title">Select bowler for Over ${overs+1}</div>
       <select class="sc-select" id="next-bowl"><option value="">Select bowler...</option>${bowlOpts}</select>
       <button class="sc-btn-primary" onclick="confirmNewBowler()">▶ Start Over ${overs+1}</button>
+      <button onclick="pushOverSummaryWhatsApp()" style="width:100%;margin-top:.4rem;background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.3);color:#25d366;border-radius:10px;padding:.5rem;font-size:.8rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📲 Share Over Summary</button>
     </div>`;
 }
 
@@ -2351,6 +2431,9 @@ function recordBall(type,runs){
     SC_PHASE='inn_done';inn.done=true;
     autoSave();
   }
+  checkBallSanity();
+  checkMilestones(inn,m);
+  saveLocalBackup();
   autoSave();
   renderScorer();
 }
@@ -2690,6 +2773,15 @@ async function fetchFromCloud(){
     syncOk=true;
   }catch(e){
     console.warn("Fetch failed:",e);
+    // Try local backup
+    const backup=loadLocalBackup();
+    if(backup&&backup.matches){
+      try{
+        STATE.matches=backup.matches;
+        if(backup.squads)STATE.squads=backup.squads;
+        console.log('Using local backup from',new Date(backup.ts).toLocaleTimeString());
+      }catch(be){console.warn('Backup load failed:',be);}
+    }
   }
   // ALWAYS render — never leave page blank due to fetch error
   try{renderMatches();}catch(e){console.error('renderMatches failed:',e);}
@@ -2698,19 +2790,272 @@ async function fetchFromCloud(){
   try{renderStats();}catch(e){console.error('renderStats failed:',e);}
   // Update sync bar
   const bar=document.querySelector('.sync-bar');
-  if(bar){bar.style.background=syncOk?'#052e16':'#1c0a0a';bar.innerHTML=syncOk?'<span class="sync-dot"></span>Live · Updated after every ball':'<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#f87171;margin-right:5px;"></span>Offline — retrying...';}
+  const barText=document.getElementById('sync-bar-text');
+  if(bar){bar.style.background=syncOk?'#052e16':'#1c0a0a';}
+  if(barText){barText.textContent=syncOk?'Live · Updated after every ball':'Offline — retrying...';}
+  if(bar&&!syncOk){const dot=bar.querySelector('.sync-dot');if(dot){dot.style.background='#f87171';dot.style.animation='none';}}
+  if(bar&&syncOk){const dot=bar.querySelector('.sync-dot');if(dot){dot.style.background='#4ade80';dot.style.animation='blink 2s infinite';}}
 }
 async function pushToCloud(payload){
   const res=await fetch(BIN_URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY,"X-Bin-Versioning":"false"},body:JSON.stringify(payload)});
   if(!res.ok){const t=await res.text();throw new Error(res.status+" "+t);}
 }
 
-function switchMatchTab(tab,btn){
-  document.querySelectorAll('#tab-matches .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('matches-container').style.display=tab==='live'?'':'none';
-  document.getElementById('results-container').style.display=tab==='results'?'':'none';
+function shareOnWhatsApp(){
+  const url=window.location.href.split('?')[0];
+  const text=`🏏 *गावमर्यादित क्रिकेट स्पर्धा 2026*
+Live scores & standings 👇
+${url}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
 }
+function switchMatchTab(tab,btn){
+  // kept for backward compat — no longer used for tab switching
+}
+
+/* ══ ITEM 2: Share button in match detail ════════════════════════════════ */
+function shareMatchOnWhatsApp(idx){
+  const m=STATE.matches[idx||DETAIL_IDX];
+  if(!m)return;
+  let text=`🏏 *${m.team1} vs ${m.team2}*\n`;
+  if(m.status==='completed'){
+    text+=`✅ ${m.result}\n`;
+    if(m.innings[0]&&m.innings[0].balls.length) text+=`${m.innings[0].team}: ${scoreStr(m.innings[0])}\n`;
+    if(m.innings[1]&&m.innings[1].balls.length) text+=`${m.innings[1].team}: ${scoreStr(m.innings[1])}\n`;
+  } else if(m.status==='live'){
+    const i0=m.innings[0];const i1=m.innings[1];
+    if(i1&&i1.balls.length>0){
+      text+=`🔴 LIVE\n${i0.team}: ${scoreStr(i0)}\n${i1.team}: ${scoreStr(i1)} (need ${innRuns(i0)+1-innRuns(i1)} more)\n`;
+    } else if(i0&&i0.balls.length>0){
+      text+=`🔴 LIVE — ${i0.team}: ${scoreStr(i0)}\n`;
+    }
+  }
+  text+=`\n📲 Live: ${window.location.href.split('?')[0]}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+/* ══ ITEM 3: Local backup ════════════════════════════════════════════════ */
+function saveLocalBackup(){
+  try{localStorage.setItem('upl2026_backup',JSON.stringify({matches:STATE.matches,squads:STATE.squads,ts:Date.now()}));}catch(e){}
+}
+function loadLocalBackup(){
+  try{
+    const raw=localStorage.getItem('upl2026_backup');
+    if(!raw)return null;
+    return JSON.parse(raw);
+  }catch(e){return null;}
+}
+
+/* ══ ITEM 4: Ball count sanity check ════════════════════════════════════ */
+function checkBallSanity(){
+  const inn=getInn();
+  const legal=innLegalBalls(inn);
+  const limit=getInnDoneLimit();
+  if(legal>limit*6){
+    const over=Math.floor(legal/6);const b=legal%6;
+    showScorerAlert(`⚠️ Over count error: ${over}.${b} legal balls recorded but max is ${limit} overs. Use Undo to fix.`,'#f59e0b');
+    return false;
+  }
+  // Check if 7+ legal balls in current over
+  const curOver=currentOverBalls(inn).filter(isLegal).length;
+  if(curOver>6){
+    showScorerAlert(`⚠️ ${curOver} legal balls in this over! Max is 6. Use Undo to fix.`,'#ef4444');
+    return false;
+  }
+  return true;
+}
+function showScorerAlert(msg,bg){
+  const el=document.getElementById('sc-alert');
+  if(!el)return;
+  el.textContent=msg;el.style.background=bg||'#f59e0b';
+  el.style.display='block';
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>{el.style.display='none';},4000);
+}
+
+/* ══ ITEM 5: Quick over summary WhatsApp push ════════════════════════════ */
+function pushOverSummaryWhatsApp(){
+  const inn=getInn();const m=getMatch();
+  const ovs=overSummary(inn);
+  if(!ovs.length)return;
+  const lastOv=ovs[ovs.length-1];
+  const ballStr=lastOv.balls.map(b=>{
+    if(b.type==='wicket')return'W';
+    if(b.type==='wide')return'Wd';
+    if(b.type==='noball')return'NB';
+    if(b.type==='bye')return`B${b.byeRuns||b.extra}`;
+    if(b.type==='legbye')return`LB${b.byeRuns||b.extra}`;
+    return b.runs===0?'•':String(b.runs);
+  }).join(' ');
+  const text=`🏏 *Over ${lastOv.num} — ${lastOv.bowler||''}*\n${ballStr}\n${lastOv.runs} runs${lastOv.wickets?' · '+lastOv.wickets+' wkt':''}\n\n${inn.team}: ${scoreStr(inn)} (${oversStr(inn)} ov)\n📲 ${window.location.href.split('?')[0]}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+/* ══ ITEM 6: Milestone alerts ════════════════════════════════════════════ */
+const _shownMilestones=new Set();
+function checkMilestones(inn,m){
+  if(!inn||!inn.balls.length)return;
+  const bs=batterStats(inn);
+  // Batter milestones
+  Object.entries(bs).forEach(([name,s])=>{
+    if(s.out||!s.balls)return;
+    [50,30,25].forEach(milestone=>{
+      const key=`${m.label}_${name}_${milestone}`;
+      if(s.runs>=milestone&&!_shownMilestones.has(key)){
+        _shownMilestones.add(key);
+        showMilestone(milestone===50?`🌟 FIFTY! ${name} reaches ${s.runs} runs!`:`🏏 ${name} crosses ${milestone} runs (${s.runs})`);
+      }
+    });
+  });
+  // Partnership milestone
+  const parts=partnerships(inn);
+  const cur=parts[parts.length-1];
+  if(cur&&cur.endAt==null){
+    [50,30].forEach(milestone=>{
+      const key=`${m.label}_part_${parts.length}_${milestone}`;
+      if(cur.runs>=milestone&&!_shownMilestones.has(key)){
+        _shownMilestones.add(key);
+        showMilestone(`🤝 ${milestone}-run partnership: ${cur.batter1} & ${cur.batter2}`);
+      }
+    });
+  }
+  // Last wicket standing
+  if(innWkts(inn)===9&&!_shownMilestones.has(`${m.label}_last9`)){
+    _shownMilestones.add(`${m.label}_last9`);
+    showMilestone('🔴 Last wicket! All depends on the final batter.');
+  }
+}
+let _milestoneTimer=null;
+const _milestoneQueue=[];
+function showMilestone(msg){
+  _milestoneQueue.push(msg);
+  if(!_milestoneTimer)processMilestoneQueue();
+}
+function processMilestoneQueue(){
+  if(!_milestoneQueue.length){_milestoneTimer=null;return;}
+  const msg=_milestoneQueue.shift();
+  const el=document.getElementById('milestone-banner');
+  if(el){el.textContent=msg;el.style.animation='none';void el.offsetHeight;el.style.animation='milestoneIn .4s ease, milestoneOut .4s 2.6s ease forwards';}
+  _milestoneTimer=setTimeout(processMilestoneQueue,3200);
+}
+
+/* ══ ITEM 7: Mini points widget ══════════════════════════════════════════ */
+function renderMiniPtsWidget(){
+  const el=document.getElementById('mini-pts-widget');
+  if(!el)return;
+  const {ptsA,ptsB}=computePoints();
+  if(ptsA.every(r=>r.P===0)&&ptsB.every(r=>r.P===0)){el.innerHTML='';return;}
+  const row=(r,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.3rem .6rem;${i>0?'border-top:1px solid rgba(255,255,255,.08)':''}">
+    <span style="font-size:.75rem;font-weight:600;">${r.team}</span>
+    <div style="display:flex;gap:.6rem;font-size:.72rem;opacity:.8;">
+      <span>${r.W}W-${r.L}L</span>
+      <span style="color:${r.Pts>0?'#4ade80':'rgba(255,255,255,.5)'};">${r.Pts}pts</span>
+      <span style="color:${r.NRR>=0?'#86efac':'#fca5a5'};">${r.NRR>=0?'+':''}${r.NRR.toFixed(2)}</span>
+    </div></div>`;
+  el.innerHTML=`<div style="background:var(--green);border-radius:12px;overflow:hidden;margin-top:.5rem;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.1);">
+      <div style="background:var(--green);padding:.35rem .6rem;"><div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);font-weight:700;">Group A</div>${ptsA.map(row).join('')}</div>
+      <div style="background:var(--green);padding:.35rem .6rem;"><div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);font-weight:700;">Group B</div>${ptsB.map(row).join('')}</div>
+    </div></div>`;
+}
+
+/* ══ ITEM 8: Tournament bracket ══════════════════════════════════════════ */
+function renderBracket(){
+  const {ptsA,ptsB}=computePoints();
+  const sf=STATE.matches.filter(m=>m.isFinal&&m.label.includes('Semi'));
+  const fin=STATE.matches.find(m=>m.isFinal&&m.label.includes('FINAL')&&!m.label.includes('Semi'));
+  const q1A=ptsA[0]?.team||'1st Group A';const q2A=ptsA[1]?.team||'2nd Group A';
+  const q1B=ptsB[0]?.team||'1st Group B';const q2B=ptsB[1]?.team||'2nd Group B';
+  const sf1=sf[0];const sf2=sf[1];
+  const sf1t1=sf1?.team1!=='TBD'?sf1.team1:q1A;const sf1t2=sf1?.team2!=='TBD'?sf1.team2:q2B;
+  const sf2t1=sf2?.team1!=='TBD'?sf2.team1:q1B;const sf2t2=sf2?.team2!=='TBD'?sf2.team2:q2A;
+  const sf1w=sf1?.winner||'';const sf2w=sf2?.winner||'';const finw=fin?.winner||'';
+  const teamBox=(name,isWinner,isDark)=>`<div style="padding:.35rem .7rem;background:${isWinner?'#16a34a':isDark?'rgba(255,255,255,.08)':'rgba(255,255,255,.04)'};border-radius:6px;font-size:.78rem;font-weight:${isWinner?700:500};color:${isWinner?'#fff':'rgba(255,255,255,.75)'};">${name}${isWinner?' ✓':''}</div>`;
+  const matchBox=(t1,t2,winner,label)=>`<div style="background:rgba(255,255,255,.06);border-radius:10px;padding:.5rem .7rem;min-width:130px;">
+    <div style="font-size:.58rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem;">${label}</div>
+    ${teamBox(t1,winner===t1,false)}
+    <div style="text-align:center;font-size:.6rem;color:rgba(255,255,255,.3);margin:.2rem 0;">vs</div>
+    ${teamBox(t2,winner===t2,false)}
+    ${winner?`<div style="font-size:.62rem;color:#4ade80;margin-top:.3rem;text-align:center;">→ ${winner}</div>`:''}
+  </div>`;
+  return`<div style="background:var(--green);border-radius:14px;padding:1rem;overflow-x:auto;">
+    <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:.75rem;font-weight:700;">Tournament Bracket</div>
+    <div style="display:flex;gap:.75rem;align-items:center;min-width:360px;">
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        ${matchBox(sf1t1,sf1t2,sf1w,'Semi Final 1')}
+        ${matchBox(sf2t1,sf2t2,sf2w,'Semi Final 2')}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0;opacity:.4;">
+        <div style="width:20px;height:1px;background:white;"></div>
+        <div style="width:1px;height:40px;background:white;"></div>
+        <div style="width:20px;height:1px;background:white;"></div>
+      </div>
+      <div>
+        ${matchBox(sf1w||'SF1 Winner',sf2w||'SF2 Winner',finw,'🏆 Final')}
+        ${finw?`<div style="text-align:center;margin-top:.5rem;font-size:.9rem;font-weight:700;color:#fbbf24;">🏆 ${finw}</div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══ ITEM 9: Player profile ══════════════════════════════════════════════ */
+let _profilePlayer=null;
+function openPlayerProfile(playerName,team){
+  _profilePlayer={name:playerName,team};
+  const all=getAllPlayerStats();
+  const p=all.find(x=>x.player===playerName&&x.team===team)||{player:playerName,team,runs:0,balls:0,fours:0,sixes:0,wickets:0,overs:0,runsConceded:0,innings:0};
+  const sp=getSpecialStats();
+  const hs=sp.highScores.filter(x=>x.player===playerName).sort((a,b)=>b.runs-a.runs)[0];
+  const bb=sp.bestBowling.filter(x=>x.player===playerName&&x.wickets>0).sort((a,b)=>b.wickets-a.wickets||a.runs-b.runs)[0];
+  const potmCount=sp.potmCounts[playerName]||0;
+  const avg=p.innings>p.notOuts?(p.runs/(p.innings-p.notOuts)).toFixed(1):'—';
+  const sr=p.balls>0?(p.runs/p.balls*100).toFixed(1):'—';
+  const er=p.overs>0?(p.runsConceded/p.overs).toFixed(2):'—';
+  // Match-by-match log
+  const matchLog=[];
+  STATE.matches.filter(m=>m.status==='completed').forEach(m=>{
+    m.innings.forEach((inn,ii)=>{
+      const bs=batterStats(inn);const bwl=bowlerStats(inn);
+      if(bs[playerName]){const s=bs[playerName];if(s.balls>0||s.out)matchLog.push({match:m.label,type:'bat',runs:s.runs,balls:s.balls,out:s.out});}
+      if(bwl[playerName]){const s=bwl[playerName];if(s.balls>0)matchLog.push({match:m.label,type:'bowl',wickets:s.wickets,runs:s.runs,balls:s.balls});}
+    });
+  });
+  const logHtml=matchLog.length?matchLog.map(e=>e.type==='bat'
+    ?`<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.78rem;"><span>${e.match}</span><span style="color:var(--green);font-weight:600;">${e.runs}${e.out?'':'*'}(${e.balls}b)</span></div>`
+    :`<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.78rem;"><span>${e.match}</span><span style="color:#d97706;font-weight:600;">${e.wickets}/${e.runs} (${oversDecToStr(e.balls/6)}ov)</span></div>`
+  ).join(''):'<div style="font-size:.82rem;color:var(--gray);">No match data yet.</div>';
+  document.getElementById('sc-modal-body').innerHTML=`
+    <div style="display:flex;align-items:center;gap:.65rem;margin-bottom:.9rem;">
+      <div style="width:42px;height:42px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;">${playerName[0]}</div>
+      <div><div style="font-size:1rem;font-weight:700;">${playerName}</div><div style="font-size:.72rem;color:var(--gray);">${team}</div></div>
+      ${potmCount?`<div style="margin-left:auto;background:#fef9c3;border-radius:8px;padding:.25rem .6rem;font-size:.72rem;font-weight:700;color:#92400e;">⭐ POTM ×${potmCount}</div>`:''}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:.9rem;">
+      ${[['Runs',p.runs],['Balls',p.balls],['Avg',avg],['SR',sr],['4s',p.fours],['6s',p.sixes],['Wkts',p.wickets],['ER',er],['HS',hs?hs.runs+(hs.notOut?'*':''):'—']].map(([l,v])=>`<div style="background:#f1f5f9;border-radius:8px;padding:.35rem .5rem;text-align:center;"><div style="font-size:.58rem;color:var(--gray);font-weight:600;text-transform:uppercase;">${l}</div><div style="font-size:.92rem;font-weight:700;">${v}</div></div>`).join('')}
+    </div>
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;color:var(--gray);margin-bottom:.4rem;">Match Log</div>
+    <div style="max-height:200px;overflow-y:auto;">${logHtml}</div>
+    <button class="sc-modal-cancel" onclick="closeModal()" style="margin-top:.75rem;">Close</button>`;
+  document.getElementById('sc-modal').classList.add('open');
+}
+
+/* ══ ITEM 10: Batting run-rate graph ═════════════════════════════════════ */
+function buildRunGraph(inn){
+  if(!inn||!inn.balls.length)return'';
+  const ovs=overSummary(inn);
+  if(ovs.length<2)return'';
+  const maxR=Math.max(...ovs.map(o=>o.runs),1);
+  const W=280;const H=60;const barW=Math.floor((W-ovs.length*2)/(ovs.length));
+  const bars=ovs.map((ov,i)=>{
+    const h=Math.max(4,Math.round((ov.runs/maxR)*(H-10)));
+    const x=i*(barW+2);const y=H-h;
+    const fill=ov.wickets>0?'#ef4444':ov.runs>=10?'#16a34a':ov.runs>=6?'#d97706':'#93c5fd';
+    return`<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${fill}" rx="2"/><text x="${x+barW/2}" y="${H+10}" text-anchor="middle" font-size="7" fill="#6b7280">${ov.num}</text>${ov.runs>0?`<text x="${x+barW/2}" y="${y-2}" text-anchor="middle" font-size="7" fill="${fill}" font-weight="bold">${ov.runs}</text>`:''}`;
+  }).join('');
+  return`<svg width="${W}" height="${H+16}" viewBox="0 0 ${W} ${H+16}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;">${bars}</svg>`;
+}
+
+/* Poll interval — increased to save DB reads (Item: reliability) */
+setInterval(()=>{if(!_fetchLock)fetchFromCloud();},60000);
 
 /* ══ TABS & LOGIN ═════════════════════════════════════════════════════════ */
 function showTab(tab,btn){
@@ -2769,7 +3114,7 @@ function renderAbout(){
 
 /* ══ INIT ═════════════════════════════════════════════════════════════════ */
 // Auto-fetch only for public users; paused when admin is logged in
-setInterval(()=>{if(!_fetchLock)fetchFromCloud();},30000);
+// Poll interval moved to 60s above
 renderAbout();
 renderStatsFilters();
 renderStats();
