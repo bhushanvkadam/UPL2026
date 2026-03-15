@@ -2684,7 +2684,20 @@ function confirmExtra(type,runs){
   if(type==='noball'&&runs%2===1){inn.batters=[inn.batters[1],inn.batters[0]];}
   rebuildFromBalls(m);
   if(checkTargetChased(inn,m)){closeModal();renderScorer();return;}
-  closeModal();autoSave();renderScorer();
+  closeModal();
+  // ── Check over/innings complete (bye/legbye can end an over) ──────────
+  const legal=innLegalBalls(inn);
+  const limit=getInnDoneLimit();
+  if(isLegal(ball)&&legal%6===0&&legal>0){
+    inn.batters=[inn.batters[1],inn.batters[0]]; // rotate strike at end of over
+    if(legal>=limit*6){SC_PHASE='inn_done';inn.done=true;}
+    else SC_PHASE='over_done';
+    autoSave();
+  } else if(innDoneCheck(inn)){
+    SC_PHASE='inn_done';inn.done=true;
+    autoSave();
+  }
+  autoSave();renderScorer();
 }
 
 // Free hit: only run out valid
