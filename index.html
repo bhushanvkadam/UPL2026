@@ -536,8 +536,8 @@ function freshMatch(label,team1,team2,isFinal){
     playerStats:{},
     // Per-ball innings data
     innings:[
-      {team:"",balls:[],batters:[null,null],bowler:"",batterIdx:0,done:false},
-      {team:"",balls:[],batters:[null,null],bowler:"",batterIdx:0,done:false}
+      {team:"",balls:[],batters:[null,null],initBatters:[null,null],bowler:"",done:false},
+      {team:"",balls:[],batters:[null,null],initBatters:[null,null],bowler:"",done:false}
     ]
   };
 }
@@ -580,11 +580,18 @@ let ACTIVE_STATS_FILTER="runs";
 // Admin auth: in-memory only — never persists across page loads or tabs
 // sessionStorage was removed because it leaked to other tabs on same browser
 let _adminLoggedIn=false;
+let _adminDetailMode=false; // only true when viewing match detail FROM admin panel
 function isAdminLoggedIn(){return _adminLoggedIn;}
-function setAdminLogin(v){_adminLoggedIn=!!v;}
+function isAdminDetailMode(){return _adminLoggedIn&&_adminDetailMode;}
+function setAdminLogin(v){_adminLoggedIn=!!v;if(!v)_adminDetailMode=false;}
 
 /* ══ INNINGS HELPERS ══════════════════════════════════════════════════════ */
 // A "ball" object: {type:'run'|'wide'|'noball'|'wicket', runs:0, batter:'', bowler:'', dismissal:'', newBatter:''}
+// Convert decimal overs (e.g. 3.6666) to display format (e.g. "3.4")
+function oversDecToStr(decOvers){
+  const balls=Math.round(decOvers*6);
+  return Math.floor(balls/6)+'.'+(balls%6);
+}
 function isLegal(b){return b.type!=='wide'&&b.type!=='noball';}
 // Total innings runs = batter runs + extras (wides, no-balls, byes, leg byes)
 function innRuns(inn){
@@ -827,7 +834,7 @@ function rebuildFromBalls(m){
     const bwl=bowlerStats(inn);
     Object.entries(bwl).forEach(([player,s])=>{
       const key=`${bowlTeam}||${player}||bowl||${mIdx}`;
-      m.playerStats[key]={overs:Math.floor(s.balls/6)+(s.balls%6)/10,runsConceded:s.runs,wickets:s.wickets};
+      m.playerStats[key]={overs:(s.balls/6),runsConceded:s.runs,wickets:s.wickets};
     });
   });
   // Rebuild match stars
@@ -875,12 +882,23 @@ function renderMatches(){
   const upcoming=STATE.matches.filter(m=>m.status==='upcoming');
   const completed=STATE.matches.filter(m=>m.status==='completed');
 
+  // Build a play-order sequence number based on when each match was started
+  // Matches that have balls = played; order by first ball existence
+  const playedMatches=STATE.matches.filter(m=>m.status!=='upcoming'||(m.innings&&m.innings[0]&&m.innings[0].balls&&m.innings[0].balls.length>0));
+  const playSeq={};
+  playedMatches.forEach((m,i)=>{ playSeq[STATE.matches.indexOf(m)]=i+1; });
+  let playCount=0;
+
   const makeCard=(m,idx)=>{
     const div=document.createElement('div');
     div.className='match-card'+(m.isFinal?' is-final':'')+(m.status==='live'?' is-live':'');
     const i0=m.innings&&m.innings[0];
     const i1=m.innings&&m.innings[1];
     const inn1Started=i1&&Array.isArray(i1.balls)&&i1.balls.length>0;
+    const hasStarted=i0&&Array.isArray(i0.balls)&&i0.balls.length>0;
+    // Dynamic label: show "Match N" based on play order if match has started
+    const seqNum=playSeq[idx];
+    const displayLabel=hasStarted&&seqNum?`Match ${seqNum} · ${m.label.includes('Group')?m.label.split('·').slice(1).join('·').trim():m.label.replace(/Match \d+ · /,'')}`:m.label;
     const inn1Done=i0&&Array.isArray(i0.balls)&&innLegalBalls(i0)>=(m.overs||MAX_OVERS)*6;
     let center;
     if(m.score1||m.score2||inn1Started){
@@ -923,7 +941,7 @@ function renderMatches(){
       if(m.topBowl2)stars+=`<div class="star-box"><div class="star-label">⚡ ${m.team2}</div><div>${m.topBowl2} <span class="star-val">${m.topBowlWkts2?m.topBowlWkts2+' wkts':''}</span></div></div>`;
       stars+='</div>';
     }
-    div.innerHTML=`<div class="match-meta">${m.label}</div><div class="match-row"><div class="t-name">${m.team1}</div>${center}<div class="t-name right">${m.team2}</div></div>${bottom}${tossLine}${stars}`;
+    div.innerHTML=`<div class="match-meta">${displayLabel}</div><div class="match-row"><div class="t-name">${m.team1}</div>${center}<div class="t-name right">${m.team2}</div></div>${bottom}${tossLine}${stars}`;
     div.style.cursor='pointer';
     div.onclick=()=>openMatchDetail(idx);
     return div;
@@ -1151,7 +1169,7 @@ function renderStats(){
       if(erA!==erB)return erA-erB;
       return b.overs-a.overs||a.player.localeCompare(b.player);
     });title='Most Wickets';valueLabel='Wkts';
-    valueFn=p=>p.wickets;subFn=p=>`${p.overs.toFixed(1)} ov · ER: ${p.overs>0?(p.runsConceded/p.overs).toFixed(2):'—'}`;
+    valueFn=p=>p.wickets;subFn=p=>`${oversDecToStr(p.overs)} ov · ER: ${p.overs>0?(p.runsConceded/p.overs).toFixed(2):'—'}`;
   }else if(ACTIVE_STATS_FILTER==='sr'){
     // Best SR: sr desc → more runs scored → more balls faced → name asc
     sorted=[...all].filter(p=>p.balls>=MIN_BALLS_BAT).sort((a,b)=>{
@@ -1167,7 +1185,7 @@ function renderStats(){
       if(erA!==erB)return erA-erB;
       return b.wickets-a.wickets||b.overs-a.overs||a.player.localeCompare(b.player);
     });title=`Best Economy (min ${MIN_OVERS_BOWL} over)`;valueLabel='ER';
-    valueFn=p=>(p.runsConceded/p.overs).toFixed(2);subFn=p=>`${p.overs.toFixed(1)} ov · ${p.runsConceded} runs · ${p.wickets} wkts`;
+    valueFn=p=>(p.runsConceded/p.overs).toFixed(2);subFn=p=>`${oversDecToStr(p.overs)} ov · ${p.runsConceded} runs · ${p.wickets} wkts`;
   }else if(ACTIVE_STATS_FILTER==='sixes'){
     // Most Sixes: sixes desc → runs desc → name asc
     sorted=[...all].filter(p=>p.sixes>0).sort((a,b)=>b.sixes-a.sixes||b.runs-a.runs||a.player.localeCompare(b.player));
@@ -1187,6 +1205,7 @@ function renderStats(){
 let DETAIL_IDX=null;
 function openMatchDetail(idx){
   DETAIL_IDX=idx;
+  _adminDetailMode=false; // public view — never show admin controls
   const m=STATE.matches[idx];
   if(!m){return;}
   if(!m.innings||m.innings.length<2){
@@ -1287,6 +1306,53 @@ function renderMatchDetail(){
     </div>`;
   } else {
     html+=`<div class="md-hero"><div style="font-size:.8rem;opacity:.7;margin-bottom:.4rem;">${m.label}</div><div style="font-size:1.1rem;font-weight:700;">${m.team1} vs ${m.team2}</div><div style="font-size:.82rem;opacity:.65;margin-top:.3rem;">⏳ Match Yet to Begin</div></div>`;
+    // Pre-match info card
+    const overs=m.overs||MAX_OVERS;
+    // Group/context
+    const grpA=GROUP_A.includes(m.team1)||GROUP_A.includes(m.team2)?'Group A':'Group B';
+    const pts=computePoints();
+    const allPts={...Object.fromEntries(pts.ptsA.map(r=>[r.team,r])),...Object.fromEntries(pts.ptsB.map(r=>[r.team,r]))};
+    const p1=allPts[m.team1];const p2=allPts[m.team2];
+    const formRow=(team,p)=>p?`<div style="display:flex;justify-content:space-between;align-items:center;padding:.55rem .9rem;border-bottom:1px solid var(--border);">
+      <div style="font-size:.88rem;font-weight:600;">${team}</div>
+      <div style="display:flex;gap:.75rem;font-size:.78rem;color:var(--gray);">
+        <span>${p.P} played</span><span style="color:var(--green);font-weight:700;">${p.W}W ${p.L}L</span>
+        <span style="color:${p.Pts>0?'var(--green)':'var(--gray)'};">${p.Pts} pts</span>
+        <span style="color:${p.NRR>=0?'var(--green-light)':'#ef4444'};">${p.NRR>=0?'+':''}${p.NRR.toFixed(2)} NRR</span>
+      </div>
+    </div>`:
+    `<div style="padding:.55rem .9rem;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--gray);">${team} — standing not available</div>`;
+    // Squads
+    const sq1=STATE.squads.find(s=>s.team===m.team1);
+    const sq2=STATE.squads.find(s=>s.team===m.team2);
+    const squadHtml=(sq,team)=>{
+      if(!sq)return`<div style="padding:.55rem .9rem;font-size:.82rem;color:var(--gray);">Squad not announced</div>`;
+      const players=sq.players.filter(p=>p.name&&p.name.trim()&&p.name!=='TBD');
+      if(!players.length)return`<div style="padding:.55rem .9rem;font-size:.82rem;color:var(--gray);">Squad to be announced</div>`;
+      return`<div style="padding:.5rem .9rem;display:flex;flex-wrap:wrap;gap:.3rem;">${players.map(p=>`<span style="background:#f1f5f9;border-radius:20px;padding:.2rem .6rem;font-size:.75rem;font-weight:${p.captain?'700':'400'};">${p.name}${p.captain?' ©':''}</span>`).join('')}</div>`;
+    };
+    html+=`<div class="md-section">
+      <div class="md-section-hdr">📋 Match Info</div>
+      <div style="padding:.6rem .9rem;display:flex;gap:1.5rem;font-size:.82rem;">
+        <div><span style="color:var(--gray);">Format</span><div style="font-weight:700;">${overs} Overs</div></div>
+        <div><span style="color:var(--gray);">Stage</span><div style="font-weight:700;">${m.isFinal?'Knockout':grpA}</div></div>
+        <div><span style="color:var(--gray);">Rule</span><div style="font-weight:700;">Must-chase</div></div>
+      </div>
+    </div>`;
+    if(p1||p2){
+      html+=`<div class="md-section">
+        <div class="md-section-hdr">📊 Current Standings</div>
+        ${formRow(m.team1,p1)}${formRow(m.team2,p2)}
+      </div>`;
+    }
+    html+=`<div class="md-section">
+      <div class="md-section-hdr">🏏 ${m.team1} Squad</div>
+      ${squadHtml(sq1,m.team1)}
+    </div>
+    <div class="md-section">
+      <div class="md-section-hdr">🏏 ${m.team2} Squad</div>
+      ${squadHtml(sq2,m.team2)}
+    </div>`;
   }
   // Build scorecard HTML separately so it can be injected into the toggle div
   let scorecardHtml='';
@@ -1348,7 +1414,7 @@ function renderMatchDetail(){
       // Render: active first, then out
       // Yet to bat
       const squad=STATE.squads.find(s=>s.team===batTeam);
-      const squadPlayers=squad?squad.players.filter(p=>p.name.trim()).map(p=>p.name):[];
+      const squadPlayers=squad?squad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name):[];
       const haveBatted=new Set(Object.keys(bs));
       const yetToBat=squadPlayers.filter(p=>!haveBatted.has(p));
       const yetRows=yetToBat.length?[`<tr style="opacity:.35"><td colspan="6" style="font-size:.72rem;padding:.45rem .75rem;font-style:italic;">Yet to bat: ${yetToBat.join(', ')}</td></tr>`]:[];
@@ -1447,12 +1513,12 @@ function renderMatchDetail(){
     </div>`;
   }
   // Stars of the match
-  const allPlayers1=(STATE.squads.find(s=>s.team===m.team1)||{players:[]}).players.filter(p=>p.name.trim()).map(p=>p.name);
-  const allPlayers2=(STATE.squads.find(s=>s.team===m.team2)||{players:[]}).players.filter(p=>p.name.trim()).map(p=>p.name);
+  const allPlayers1=(STATE.squads.find(s=>s.team===m.team1)||{players:[]}).players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
+  const allPlayers2=(STATE.squads.find(s=>s.team===m.team2)||{players:[]}).players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   const allPlayersForPOTM=[...allPlayers1.map(n=>({n,t:m.team1})),...allPlayers2.map(n=>({n,t:m.team2}))];
   scorecardHtml+=`<div class="md-section"><div class="md-section-hdr" style="display:flex;align-items:center;justify-content:space-between;">
     <span>⭐ Stars of the Match</span>
-    ${isAdminLoggedIn()?`<button onclick="togglePOTMEdit()" style="font-size:.65rem;background:#fef3c7;color:#92400e;border:none;border-radius:6px;padding:.18rem .5rem;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;">✏️ Edit</button>`:''}
+    ${isAdminDetailMode()?`<button onclick="togglePOTMEdit()" style="font-size:.65rem;background:#fef3c7;color:#92400e;border:none;border-radius:6px;padding:.18rem .5rem;cursor:pointer;font-weight:700;font-family:'DM Sans',sans-serif;">✏️ Edit</button>`:''}
   </div>
   <div id="potm-view" style="display:grid;grid-template-columns:1fr 1fr;gap:.55rem;padding:.65rem .9rem;">
     ${m.potm?`<div style="background:#fef9c3;border-radius:9px;padding:.6rem .75rem;grid-column:1/-1;display:flex;align-items:center;gap:.6rem;"><span style="font-size:1.4rem;">🏆</span><div><div style="font-size:.58rem;color:#92400e;font-weight:700;text-transform:uppercase;">Player of the Match</div><div style="font-size:1rem;font-weight:700;">${m.potm}</div></div></div>`:''}
@@ -1493,7 +1559,7 @@ function renderMatchDetail(){
   </div>`;
 
   // Inline ball editing (admin only)
-  if(isAdminLoggedIn()){
+  if(isAdminDetailMode()){
     html+=`<div class="md-section" style="border-color:#fca5a5;">
       <div class="md-section-hdr" style="color:#991b1b;">⚠️ Edit Balls (Admin)</div>
       <div style="padding:.5rem .9rem .25rem;font-size:.75rem;color:var(--gray);">Tap any ball dot to edit it. Changes save immediately.</div>
@@ -1715,10 +1781,24 @@ function confirmDeleteBall(matchIdx,innIdx,ballIdx){
 /* ══ ADMIN: SQUAD EDITOR ══════════════════════════════════════════════════ */
 function renderAdminList(){
   const c=document.getElementById('admin-match-list');c.innerHTML='';
+  const allTeams=[...GROUP_A,...GROUP_B];
   STATE.matches.forEach((m,idx)=>{
     const div=document.createElement('div');div.className='admin-match-list-card'+(m.isFinal?' is-final':'');
     const sc=m.status==='live'?'aml-live':m.status==='completed'?'aml-done':'aml-upcoming';
     const st=m.status==='live'?'🔴 Live':m.status==='completed'?'✅ Done':'⏳ Match Yet to Begin';
+    // Knockout team selectors — show for isFinal matches not yet started
+    const koTeamSelectors=m.isFinal&&m.status==='upcoming'?`
+      <div style="padding:.6rem .75rem;border-top:1px solid var(--border);background:#fffbeb;display:grid;grid-template-columns:1fr auto 1fr;gap:.4rem;align-items:center;" onclick="event.stopPropagation()">
+        <select onchange="setKnockoutTeam(${idx},'team1',this.value)" style="background:white;border:1px solid var(--border);border-radius:6px;padding:.3rem .4rem;font-size:.75rem;font-family:'DM Sans',sans-serif;outline:none;">
+          <option value="TBD">— Team 1</option>
+          ${allTeams.map(t=>`<option value="${t}"${m.team1===t?' selected':''}>${t}</option>`).join('')}
+        </select>
+        <span style="font-size:.7rem;color:var(--gray);font-weight:700;">vs</span>
+        <select onchange="setKnockoutTeam(${idx},'team2',this.value)" style="background:white;border:1px solid var(--border);border-radius:6px;padding:.3rem .4rem;font-size:.75rem;font-family:'DM Sans',sans-serif;outline:none;">
+          <option value="TBD">— Team 2</option>
+          ${allTeams.map(t=>`<option value="${t}"${m.team2===t?' selected':''}>${t}</option>`).join('')}
+        </select>
+      </div>`:'';
     div.innerHTML=`<div class="aml-inner" onclick="openScorer(${idx})" style="cursor:pointer;">
       <div style="flex:1;"><div class="aml-label">${m.label}</div><div class="aml-teams">${m.team1} vs ${m.team2}</div></div>
       <div style="display:flex;align-items:center;gap:.35rem;flex-shrink:0;" onclick="event.stopPropagation()">
@@ -1730,22 +1810,48 @@ function renderAdminList(){
       <span class="aml-status ${sc}">${st}</span>
       <button onclick="event.stopPropagation();resetMatch(${idx})" style="background:#fee2e2;color:#991b1b;border:none;border-radius:6px;padding:.25rem .55rem;font-size:.68rem;font-weight:700;cursor:pointer;margin-left:.4rem;font-family:'DM Sans',sans-serif;">Reset</button>
       <span style="color:var(--gray);font-size:1rem;margin-left:.3rem;">›</span>
-    </div>`;
+    </div>${koTeamSelectors}`;
     c.appendChild(div);
   });
+}
+function setKnockoutTeam(idx,field,value){
+  const m=STATE.matches[idx];
+  m[field]=value;
+  // Also update innings team if not started
+  if(!m.innings[0].balls.length){
+    m.innings[0].team=m.team1||'';
+    m.innings[1].team=m.team2||'';
+  }
+  renderAdminList();
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(console.warn);
+  renderMatches();renderPoints();
 }
 function setMatchOvers(idx,overs){
   STATE.matches[idx].overs=overs;
   pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(console.warn);
 }
 function resetMatch(idx){
-  if(!confirm(`Reset all data for match ${idx+1}? This cannot be undone.`))return;
   const m=STATE.matches[idx];
+  document.getElementById('sc-modal-body').innerHTML=`
+    <div class="sc-modal-title" style="color:#ef4444;">🗑 Reset Match?</div>
+    <p style="font-size:.85rem;color:#94a3b8;margin-bottom:1rem;">This will delete all scoring data for <strong style="color:white;">${m.team1} vs ${m.team2}</strong>.<br>This cannot be undone.</p>
+    <button class="sc-modal-btn red" onclick="confirmResetMatch(${idx})">Yes, Reset This Match</button>
+    <button class="sc-modal-cancel" onclick="closeModal()" style="margin-top:.5rem;">Cancel</button>`;
+  document.getElementById('sc-modal').classList.add('open');
+}
+function confirmResetMatch(idx){
+  closeModal();
+  const m=STATE.matches[idx];
+  const savedOvers=m.overs||MAX_OVERS;
   const def=freshMatch(m.label,m.team1,m.team2,m.isFinal);
+  def.overs=savedOvers;
   STATE.matches[idx]=def;
   pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION})
-    .then(()=>{renderAdminList();renderMatches();renderPoints();renderStats();alert('✅ Match reset!');})
-    .catch(e=>alert('Reset failed: '+e.message));
+    .then(()=>{renderAdminList();renderMatches();renderPoints();renderStats();})
+    .catch(e=>{
+      document.getElementById('sc-modal-body').innerHTML=`<div class="sc-modal-title">❌ Reset Failed</div><p style="font-size:.85rem;color:#94a3b8;margin-bottom:.75rem;">${e.message}</p><button class="sc-modal-cancel" onclick="closeModal()">Close</button>`;
+      document.getElementById('sc-modal').classList.add('open');
+    });
 }
 function renderAdminSquads(){
   const c=document.getElementById('admin-squad-list');c.innerHTML='';
@@ -1798,14 +1904,12 @@ function openScorer(idx){
   ];
   m.innings[0].team=m.innings[0].team||m.team1;
   m.innings[1].team=m.innings[1].team||m.team2;
-  // Apply toss decision: toss winner's choice sets who bats first
-  // Only reassign if innings haven't started yet (no balls bowled)
+  // Re-apply toss if innings haven't started yet (overrides the || defaults above)
   if(m.tossWinner&&m.tossDecision&&!m.innings[0].balls.length){
     const tossWinnerBats=m.tossDecision==='bat';
     const battingFirst=tossWinnerBats?m.tossWinner:(m.tossWinner===m.team1?m.team2:m.team1);
-    const bowlingFirst=battingFirst===m.team1?m.team2:m.team1;
     m.innings[0].team=battingFirst;
-    m.innings[1].team=bowlingFirst;
+    m.innings[1].team=battingFirst===m.team1?m.team2:m.team1;
   }
   // Resume from correct innings
   if(innDoneCheck(m.innings[0],matchOv)&&!innDoneCheck(m.innings[1],matchOv)){SCORER_INN=1;}
@@ -1937,7 +2041,7 @@ function renderScorer(){
 
 function renderNewBatterSelect(body,m,inn){
   const squad=STATE.squads.find(s=>s.team===inn.team)||makeSquad(inn.team);
-  const allPlayers=squad.players.filter(p=>p.name.trim()).map(p=>p.name);
+  const allPlayers=squad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   const bs=batterStats(inn);
   // Players not out and not currently at crease
   const available=allPlayers.filter(p=>{
@@ -1973,23 +2077,26 @@ function confirmNewBatter(){
 }
 
 function renderScorerSetup(body,m,inn){
-  // Determine batting team based on toss (if set)
+  // For 2nd innings: always use the already-set inn.team (set by toss/startSecondInnings)
+  // For 1st innings with toss: apply toss to determine batting team
   let battingTeam=inn.team||m.team1;
-  if(m.tossWinner&&m.tossDecision&&!inn.balls.length){
+  if(SCORER_INN===0&&m.tossWinner&&m.tossDecision&&!inn.balls.length){
     const tossWinnerBats=m.tossDecision==='bat';
     battingTeam=tossWinnerBats?m.tossWinner:(m.tossWinner===m.team1?m.team2:m.team1);
-    // Keep innings teams in sync
-    if(SCORER_INN===0){
-      m.innings[0].team=battingTeam;
-      m.innings[1].team=battingTeam===m.team1?m.team2:m.team1;
-    }
+    m.innings[0].team=battingTeam;
+    m.innings[1].team=battingTeam===m.team1?m.team2:m.team1;
     inn.team=battingTeam;
+  } else if(SCORER_INN===1){
+    // 2nd innings: batting team is whoever is NOT in innings[0]
+    battingTeam=m.innings[1].team||(m.innings[0].team===m.team1?m.team2:m.team1);
+    inn.team=battingTeam;
+    m.innings[1].team=battingTeam;
   }
   const squad=STATE.squads.find(s=>s.team===battingTeam)||makeSquad(battingTeam);
   const bowlTeam=battingTeam===m.team1?m.team2:m.team1;
   const bowlSquad=STATE.squads.find(s=>s.team===bowlTeam)||makeSquad(bowlTeam);
-  const players=squad.players.filter(p=>p.name.trim()).map(p=>p.name);
-  const bowlers=bowlSquad.players.filter(p=>p.name.trim()).map(p=>p.name);
+  const players=squad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
+  const bowlers=bowlSquad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   const opts=players.map(p=>`<option value="${p}">${p}</option>`).join('');
   const bowlOpts=bowlers.map(p=>`<option value="${p}">${p}</option>`).join('');
   const targetLine=SCORER_INN===1?`<div style="background:rgba(217,119,6,.15);border:1px solid rgba(217,119,6,.3);border-radius:10px;padding:.65rem .9rem;margin-bottom:.75rem;text-align:center;"><div style="font-size:.62rem;color:#fbbf24;text-transform:uppercase;font-weight:700;">Target</div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:#fbbf24;">${innRuns(m.innings[0])+1}</div></div>`:'';
@@ -2025,7 +2132,7 @@ function renderOverDone(body,m,inn){
   const runs=innRuns(inn);const wkts=innWkts(inn);
   const bowlTeam=getInn().team===m.team1?m.team2:m.team1;
   const bowlSquad=STATE.squads.find(s=>s.team===bowlTeam)||makeSquad(bowlTeam);
-  const allBowlers=bowlSquad.players.filter(p=>p.name.trim()).map(p=>p.name);
+  const allBowlers=bowlSquad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   // FIX 1a: exclude bowler who just bowled
   const lastOverBowler=inn.bowler||'';
   const bowlers=allBowlers.filter(p=>p!==lastOverBowler);
@@ -2072,7 +2179,7 @@ function renderInningsDone(body,m,inn){
         <h3>${inn.team} — Innings Complete</h3>
         <p>${inn.team}: ${runs}/${wkts} in ${m.overs||MAX_OVERS} overs</p>
         <p style="color:#4ade80;font-weight:700;margin-top:.3rem;">Target: ${runs+1} runs</p>
-        <button class="sc-btn-primary" onclick="startSecondInnings()">▶ Begin Chase — ${m.team2}</button>
+        <button class="sc-btn-primary" onclick="startSecondInnings()">▶ Begin Chase — ${m.innings[1].team||m.team2}</button>
       </div>`;
   } else {
     const inn0runs=innRuns(m.innings[0]);
@@ -2134,8 +2241,10 @@ function confirmNewBowler(){
 function startSecondInnings(){
   SCORER_INN=1;
   const m=getMatch();
-  // innings[1].team already set by toss logic in openScorer; fallback if not
-  if(!m.innings[1].team) m.innings[1].team=m.innings[0].team===m.team1?m.team2:m.team1;
+  // innings[1].team set by toss logic; derive fallback from innings[0].team
+  if(!m.innings[1].team){
+    m.innings[1].team=m.innings[0].team===m.team1?m.team2:m.team1;
+  }
   SC_PHASE='setup';
   renderScorer();
 }
@@ -2173,6 +2282,21 @@ function innDoneCheck(inn, overs){
 function m_overs(){
   const m=STATE.matches[SCORER_IDX];
   return(m&&m.overs)||MAX_OVERS;
+}
+
+// Call after every ball to auto-complete match if target chased
+function checkTargetChased(inn,m){
+  if(SCORER_INN!==1||innDoneCheck(inn))return false;
+  const target=innRuns(m.innings[0])+1;
+  if(innRuns(inn)>=target){
+    inn.done=true;
+    rebuildFromBalls(m);
+    _completeMatch(m,innRuns(m.innings[0]),innRuns(inn),innWkts(inn));
+    autoSave();
+    SC_PHASE='inn_done';
+    return true;
+  }
+  return false;
 }
 
 function recordBall(type,runs){
@@ -2214,6 +2338,10 @@ function recordBall(type,runs){
 
   if(!innDoneCheck(inn))rebuildFromBalls(m);
   const legal=innLegalBalls(inn);
+
+  // ── Auto-complete when target is chased (2nd innings) ───────────────
+  if(checkTargetChased(inn,m)){renderScorer();return;}
+
   if(isLegal(ball)&&legal%6===0&&legal>0){
     inn.batters=[inn.batters[1],inn.batters[0]];
     if(legal>=limit*6){SC_PHASE='inn_done';inn.done=true;}
@@ -2230,8 +2358,16 @@ function recordBall(type,runs){
 function undoBall(){
   const inn=getInn();
   if(!inn.balls.length)return;
+  // Before popping, restore inn.bowler to the bowler of the ball being undone
+  // This ensures if we're undoing after a bowler change, the right bowler is restored
+  const lastBall=inn.balls[inn.balls.length-1];
+  if(lastBall&&lastBall.bowler) inn.bowler=lastBall.bowler;
   inn.balls.pop();
   SC_PHASE='batting';
+  // After undo, if we're back at the last ball of previous over (legal%6===0),
+  // re-enter over_done so bowler can be re-selected if needed
+  const legal=innLegalBalls(inn);
+  if(legal>0&&legal%6===0) SC_PHASE='over_done';
   rebuildFromBalls(getMatch());
   renderScorer();
 }
@@ -2240,7 +2376,7 @@ function undoBall(){
 function openWicketModal(){
   const inn=getInn();const m=getMatch();
   const squad=STATE.squads.find(s=>s.team===inn.team)||makeSquad(inn.team);
-  const allPlayers=squad.players.filter(p=>p.name.trim()).map(p=>p.name);
+  const allPlayers=squad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   const usedBatters=batterStats(inn);
   // FIX 1b: exclude already-out batters from new batter list
   const newBatAvail=allPlayers.filter(p=>{
@@ -2257,7 +2393,7 @@ function openWicketModal(){
   // Fielding team players (for caught/stumped/run-out fielder name) FIX 9
   const fieldTeam=getInn().team===m.team1?m.team2:m.team1;
   const fieldSquad=STATE.squads.find(s=>s.team===fieldTeam)||makeSquad(fieldTeam);
-  const fieldPlayers=fieldSquad.players.filter(p=>p.name.trim()).map(p=>p.name);
+  const fieldPlayers=fieldSquad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   const dismissalTypes=['Bowled','Caught','Caught & Bowled','LBW','Run Out','Stumped','Hit Wicket','Retired Out'];
   document.getElementById('sc-modal-body').innerHTML=`
     <div class="sc-modal-title">🔴 Record Wicket</div>
@@ -2330,9 +2466,15 @@ function confirmWicket(){
   autoSave();
   const legal=innLegalBalls(inn);
   if(innDoneCheck(inn)){SC_PHASE='inn_done';inn.done=true;}
-  else if(legal%6===0&&legal>0){SC_PHASE='over_done';inn.batters=[inn.batters[1],inn.batters[0]];}
-  // FIX 2: if new batter not selected, show "select batter" prompt instead of blocking
-  if(!innDoneCheck(inn)&&!newBat&&SC_PHASE==='batting'){SC_PHASE='new_batter';}
+  else if(legal%6===0&&legal>0){
+    // End of over — but if batter is null (new batter needed), show that first
+    inn.batters=[inn.batters[1],inn.batters[0]];
+    if(!newBat&&inn.batters.some(b=>b===null)){SC_PHASE='new_batter';}
+    else{SC_PHASE='over_done';}
+  } else {
+    // Mid-over — if no new batter selected, show prompt
+    if(!innDoneCheck(inn)&&!newBat){SC_PHASE='new_batter';}
+  }
   renderScorer();
 }
 
@@ -2340,7 +2482,7 @@ function openChangeBowler(){
   const inn=getInn();const m=getMatch();
   const bowlTeam=getInn().team===m.team1?m.team2:m.team1;
   const bowlSquad=STATE.squads.find(s=>s.team===bowlTeam)||makeSquad(bowlTeam);
-  const bowlers=bowlSquad.players.filter(p=>p.name.trim()).map(p=>p.name);
+  const bowlers=bowlSquad.players.filter(p=>p.name.trim()&&p.name!=='TBD').map(p=>p.name);
   document.getElementById('sc-modal-body').innerHTML=`
     <div class="sc-modal-title">🔄 Bowling Change</div>
     <select class="sc-modal-select" id="change-bowl">
@@ -2401,7 +2543,9 @@ function confirmExtra(type,runs){
   const effectiveRuns=(type==='bye'||type==='legbye')?runs:(type==='wide'?0:runs);
   if(isLegal(ball)&&effectiveRuns%2===1){inn.batters=[inn.batters[1],inn.batters[0]];}
   if(type==='noball'&&runs%2===1){inn.batters=[inn.batters[1],inn.batters[0]];}
-  rebuildFromBalls(m);closeModal();autoSave();renderScorer();
+  rebuildFromBalls(m);
+  if(checkTargetChased(inn,m)){closeModal();renderScorer();return;}
+  closeModal();autoSave();renderScorer();
 }
 
 // Free hit: only run out valid
@@ -2638,4 +2782,3 @@ if(_savedMdIdx!==null){
 }
 // Admin session is NOT restored on page reload (in-memory only for security)
 </script>
-
