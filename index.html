@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>गावमर्यादित क्रिकेट स्पर्धा 2026</title>
+<title>उत्कर्ष मंडळ आयोजित गावमर्यादित क्रिकेट स्पर्धा 2026 | Live Scores</title>
+<meta name="description" content="Live ball-by-ball scores, points table & player stats">
+<meta property="og:title" content="उत्कर्ष मंडळ आयोजित गावमर्यादित क्रिकेट स्पर्धा 2026 | Live Scores">
+<meta property="og:description" content="Live ball-by-ball scores, points table & player stats">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://og-image-generator.vercel.app/api/og?title=Cricket+2026&description=Live+Scores">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="उत्कर्ष मंडळ आयोजित गावमर्यादित क्रिकेट स्पर्धा 2026 | Live Scores">
+<meta name="twitter:description" content="Live ball-by-ball scores, points table & player stats">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23dc2626'/><path d='M50 8 C50 8 62 25 62 50 C62 75 50 92 50 92' stroke='white' stroke-width='3.5' fill='none'/><path d='M50 8 C50 8 38 25 38 50 C38 75 50 92 50 92' stroke='white' stroke-width='3.5' fill='none'/><path d='M8 50 C25 38 75 38 92 50' stroke='white' stroke-width='3.5' fill='none'/><path d='M12 35 C30 28 70 28 88 35' stroke='white' stroke-width='2.5' fill='none'/><path d='M12 65 C30 72 70 72 88 65' stroke='white' stroke-width='2.5' fill='none'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--green:#14532d;--green-mid:#166534;--green-light:#16a34a;--gold:#b45309;--gold-light:#d97706;--cream:#fefce8;--dark:#1c1917;--gray:#6b7280;--border:#e5e7eb;--red:#991b1b;}
@@ -11,22 +20,22 @@
 body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
 .sync-bar{text-align:center;background:#052e16;color:#86efac;font-size:0.7rem;padding:0.32rem;letter-spacing:.02em;}
 .sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ade80;margin-right:5px;animation:blink 2s infinite;}
-.hero{background:linear-gradient(160deg,#0f2d1a 0%,#14532d 45%,#1a6b38 100%);color:white;text-align:center;padding:2.5rem 1.5rem 2rem;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-80px;right:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);pointer-events:none;}
-.hero::after{content:'';position:absolute;bottom:-60px;left:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(212,167,6,.08) 0%,transparent 70%);pointer-events:none;}
-.organiser{font-size:1.05rem;letter-spacing:.01em;font-weight:700;opacity:.92;margin-bottom:.1rem;}
-.organiser-sub{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;opacity:.45;margin-bottom:.7rem;font-weight:500;}
-.hero-year-badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.7);padding:.2rem .75rem;margin-bottom:.65rem;text-transform:uppercase;}
+.hero{background:var(--green);color:white;text-align:center;padding:2rem 1.5rem 1.75rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;left:-60px;width:220px;height:220px;border-radius:50%;border:45px solid rgba(255,255,255,0.055);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-80px;right:-40px;width:300px;height:300px;border-radius:50%;border:55px solid rgba(255,255,255,0.04);pointer-events:none;}
+.hero-ring-mid{position:absolute;top:50%;left:-30px;transform:translateY(-50%);width:140px;height:140px;border-radius:50%;border:28px solid rgba(212,167,6,0.07);pointer-events:none;}
+.organiser{font-size:1.2rem;letter-spacing:.02em;font-weight:700;opacity:.95;margin-bottom:.05rem;}
+.organiser-sub{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;opacity:.55;margin-bottom:.7rem;font-weight:600;}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.45rem,5vw,2.5rem);font-weight:900;line-height:1.15;letter-spacing:-.01em;}
-.hero-tagline{font-size:clamp(.8rem,2.5vw,.95rem);opacity:.55;font-weight:400;margin-bottom:1.25rem;letter-spacing:.02em;}
-.hero-divider{width:40px;height:2px;background:rgba(212,167,6,.6);margin:.75rem auto;}
-.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.5rem .75rem;margin:.5rem 0 1rem;font-size:.75rem;opacity:.7;font-weight:500;}
-.hero-meta-sep{opacity:.25;}
-.hero-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:0.5rem;margin-top:.25rem;}
+.hero-meta{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.35rem;margin:.6rem 0 .75rem;font-size:.75rem;opacity:.7;font-weight:500;}
+.hero-meta-sep{opacity:.35;}
+.hero-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:0.4rem;margin-top:.25rem;}
 .badge{display:inline-flex;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.9);font-size:0.73rem;font-weight:500;padding:0.3rem 0.9rem;border-radius:999px;letter-spacing:.01em;}
 .wa-share-btn{display:inline-flex;align-items:center;gap:.4rem;background:#25d366;color:white;border:none;border-radius:999px;padding:.38rem 1.1rem;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.85rem;transition:background .15s;box-shadow:0 2px 8px rgba(37,211,102,.3);}
 .wa-share-btn:active{background:#128c7e;}
 .badge.gold{background:linear-gradient(135deg,#b45309,#d97706);border-color:rgba(217,119,6,.5);color:#fef9c3;box-shadow:0 2px 8px rgba(180,83,9,.3);}
+.wa-share-btn{display:inline-flex;align-items:center;gap:.4rem;background:#25d366;color:white;border:none;border-radius:999px;padding:.38rem 1.1rem;font-size:.75rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:.85rem;transition:background .15s;box-shadow:0 2px 8px rgba(37,211,102,.3);}
+.wa-share-btn:active{background:#128c7e;}
 .tabs{display:flex;justify-content:center;gap:0.3rem;background:linear-gradient(180deg,#0f2d1a,#14532d);padding:0.6rem 0.75rem;flex-wrap:wrap;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 2px 12px rgba(0,0,0,.3);}
 .tab-btn{background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);border:1px solid transparent;padding:0.38rem 0.85rem;border-radius:999px;font-size:0.78rem;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.18s;letter-spacing:.01em;}
 .tab-btn.active,.tab-btn:hover{background:#d97706;color:#fff8e1;border-color:rgba(217,119,6,.5);box-shadow:0 1px 6px rgba(217,119,6,.3);}
@@ -322,6 +331,7 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
 .sc-over-balls{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.75rem;align-items:center;}
 .sc-ball{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;}
 .ball-dot{background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);}
+.ball-bye{background:rgba(255,255,255,.15);color:rgba(255,255,255,.75);border-radius:5px !important;font-size:.55rem !important;padding:0 3px;min-width:24px;}
 .ball-1{background:#374151;color:white;}
 .ball-2{background:#1e3a5f;color:#93c5fd;}
 .ball-3{background:#1e3a5f;color:#93c5fd;}
@@ -396,6 +406,7 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
 <body>
 <div class="sync-bar"><span class="sync-dot"></span><span id="sync-bar-text">Live · Updated after every ball</span></div>
 <div class="hero">
+  <div class="hero-ring-mid"></div>
   <div class="organiser">उत्कर्ष कला, क्रीडा व सांस्कृतिक मंडळ</div>
   <div class="organiser-sub">आयोजित</div>
   <h1>गावमर्यादित क्रिकेट स्पर्धा 2026</h1>
@@ -411,6 +422,10 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
     <span class="badge">🥈 ₹2,001 + Trophy</span>
     <span class="badge" style="background:rgba(255,255,255,.08);">6 Teams · 2 Groups</span>
   </div>
+  <button class="wa-share-btn" onclick="shareOnWhatsApp()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.522 5.847L.057 23.882l6.197-1.444A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.66-.488-5.196-1.343l-.372-.214-3.862.9.943-3.741-.235-.382A9.936 9.936 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    Share on WhatsApp
+  </button>
 </div>
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('matches',this)">Matches</button>
@@ -459,6 +474,8 @@ footer{text-align:center;padding:1.4rem 1rem;color:var(--gray);font-size:0.76rem
       <div id="admin-squad-list"></div>
       <button class="btn-green" style="margin-top:0.75rem;" onclick="saveSquads()">💾 Squad Lists</button>
       <div id="squad-flash" style="display:none;background:#dcfce7;color:#166534;border-radius:8px;padding:0.5rem;text-align:center;font-size:0.82rem;font-weight:600;margin-top:0.5rem;"></div>
+      <div class="admin-section-title">🏅 Tournament Awards</div>
+      <div id="admin-awards-panel"></div>
     </div>
   </div>
 </div>
@@ -595,7 +612,8 @@ const PRIZES=[
 /* ══ STATE ════════════════════════════════════════════════════════════════ */
 let STATE={
   matches:JSON.parse(JSON.stringify(DEFAULT_MATCHES)),
-  squads:JSON.parse(JSON.stringify(DEFAULT_SQUADS))
+  squads:JSON.parse(JSON.stringify(DEFAULT_SQUADS)),
+  awards:{pott:'',bestBat:'',bestBowl:'',bestField:''}
 };
 let ACTIVE_STATS_FILTER="runs";
 
@@ -1042,7 +1060,7 @@ function renderPoints(){
         <div style="margin-top:.4rem;font-size:.7rem;color:#64748b;">NRR = ${rpoFor} − ${rpoAg} = <strong style="color:${r.NRR>=0?'#16a34a':'#dc2626'};">${nrrStr}</strong></div>
       </td></tr>`;
     }).join('');
-    sec.innerHTML=`<div class="pts-group-pill">${g}</div><div class="pts-card"><table class="pts-table"><thead><tr><th>Team</th><th>P</th><th>W</th><th>L</th><th>Pts</th><th>NRR</th></tr></thead><tbody>${rowsHtml}</tbody></table></div><div style="font-size:0.68rem;color:var(--gray);margin-top:0.35rem;padding-left:0.2rem;"><span style="background:#dcfce7;color:#166534;padding:0.1rem 0.35rem;border-radius:4px;margin-right:0.35rem;">✓ Q</span>Qualified <span style="background:#fee2e2;color:#991b1b;padding:0.1rem 0.35rem;border-radius:4px;margin:0 0.35rem;">✗ E</span>Eliminated (confirmed only)</div>`;
+    sec.innerHTML=`<div class="pts-group-pill">${g}</div><div class="pts-card"><table class="pts-table"><thead><tr><th>Team</th><th>P</th><th>W</th><th>L</th><th>Pts</th><th>NRR</th></tr></thead><tbody>${rowsHtml}</tbody></table></div><div style="font-size:0.68rem;color:var(--gray);margin-top:0.35rem;padding-left:0.2rem;"><span style="background:#dcfce7;color:#166534;padding:0.1rem 0.35rem;border-radius:4px;margin-right:0.35rem;">✓ Q</span>Qualified <span style="background:#fee2e2;color:#991b1b;padding:0.1rem 0.35rem;border-radius:4px;margin:0 0.35rem;">✗ E</span>Eliminated</div>`;
     pc.appendChild(sec);
   });
   // ── Knockout Stage card ─────────────────────────────────────────────
@@ -1090,12 +1108,18 @@ function renderPoints(){
   };
 
   // Champion banner
+  // Runner up = team that lost the final
+  const finLoser=fin&&finWinner?(fin.team1===finWinner?fin.team2:fin.team1):'';
   const champBanner=finWinner?`
-    <div style="background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);padding:1.25rem 1rem;text-align:center;border-radius:0 0 14px 14px;">
-      <div style="font-size:2.5rem;margin-bottom:.35rem;">🏆</div>
-      <div style="font-size:.65rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#fde68a;margin-bottom:.2rem;">Tournament Champion</div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#fef9c3;letter-spacing:-.01em;">${finWinner}</div>
-      <div style="font-size:.72rem;color:rgba(253,230,138,.65);margin-top:.35rem;">${fin&&fin.result||''}</div>
+    <div style="background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);padding:1.25rem 1rem 1rem;text-align:center;">
+      <div style="font-size:2.2rem;margin-bottom:.3rem;">🏆</div>
+      <div style="font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#fde68a;margin-bottom:.2rem;">Tournament Champion</div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fef9c3;letter-spacing:-.01em;">${finWinner}</div>
+      <div style="font-size:.7rem;color:rgba(253,230,138,.65);margin-top:.25rem;">${fin&&fin.result||''}</div>
+    </div>
+    <div style="background:rgba(255,255,255,.06);padding:.75rem 1rem;text-align:center;border-top:1px solid rgba(255,255,255,.08);">
+      <div style="font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.2rem;">🥈 Runner Up</div>
+      <div style="font-size:1.05rem;font-weight:700;color:rgba(255,255,255,.8);">${finLoser}</div>
     </div>`:'';
 
   koSec.innerHTML=`
@@ -1106,6 +1130,27 @@ function renderPoints(){
       ${champBanner}
     </div>`;
   pc.appendChild(koSec);
+
+  // ── Tournament Awards (only shown if at least one award is set) ──────
+  const awards=STATE.awards||{pott:'',bestBat:'',bestBowl:'',bestField:''};
+  const hasAnyAward=awards.pott||awards.bestBat||awards.bestBowl||awards.bestField;
+  if(hasAnyAward){
+    const awardSec=document.createElement('div');awardSec.className='pts-section';
+    const awardCard=(icon,label,name)=>name?`
+      <div style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;border-bottom:1px solid var(--border);">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#fef3c7,#fde68a);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">${icon}</div>
+        <div><div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gray);margin-bottom:.15rem;">${label}</div>
+        <div style="font-size:.95rem;font-weight:700;color:var(--dark);">${name}</div></div>
+      </div>`:'';
+    awardSec.innerHTML=`<div class="pts-group-pill" style="background:#b45309;">🏅 Tournament Awards</div>
+      <div class="pts-card" style="overflow:hidden;">
+        ${awardCard('🏆','Player of the Tournament',awards.pott)}
+        ${awardCard('🏏','Best Batter',awards.bestBat)}
+        ${awardCard('⚡','Best Bowler',awards.bestBowl)}
+        ${awardCard('🧤','Best Fielder',awards.bestField)}
+      </div>`;
+    pc.appendChild(awardSec);
+  }
   // Bracket removed from points page
 }
 
@@ -1509,8 +1554,8 @@ function renderMatchDetail(){
           if(b.type==='wicket'){cls='ball-w';lbl='W';}
           else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
           else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-          else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
-          else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
+          else if(b.type==='bye'){cls='ball-bye';lbl='B'+(b.byeRuns||b.extra||'');}
+          else if(b.type==='legbye'){cls='ball-bye';lbl='LB'+(b.byeRuns||b.extra||'');}
           else if(b.runs===4){cls='ball-4';lbl='4';}
           else if(b.runs===6){cls='ball-6';lbl='6';}
           else if(b.runs>0){cls='ball-1';lbl=b.runs;}
@@ -1544,7 +1589,7 @@ function renderMatchDetail(){
       if(!sq)return`<div style="padding:.55rem .9rem;font-size:.82rem;color:var(--gray);">Squad not announced</div>`;
       const players=sq.players.filter(p=>p.name&&p.name.trim()&&p.name!=='TBD');
       if(!players.length)return`<div style="padding:.55rem .9rem;font-size:.82rem;color:var(--gray);">Squad to be announced</div>`;
-      return`<div style="padding:.5rem .9rem;display:flex;flex-wrap:wrap;gap:.3rem;">${players.map(p=>`<span style="background:#f1f5f9;border-radius:20px;padding:.2rem .6rem;font-size:.75rem;font-weight:${p.captain?'700':'400'};">${p.name}${p.captain?' ©':''}</span>`).join('')}</div>`;
+      return`<div style="padding:.5rem .9rem;display:flex;flex-wrap:wrap;gap:.3rem;">${players.map(p=>`<span style="background:#f1f5f9;border-radius:20px;padding:.2rem .6rem;font-size:.75rem;font-weight:${p.captain?'700':'400'};">${p.name}</span>`).join('')}</div>`;
     };
     html+=`<div class="md-section">
       <div class="md-section-hdr">📋 Match Info</div>
@@ -1706,8 +1751,8 @@ function renderMatchDetail(){
           if(b.type==='wicket'){cls='ball-w';lbl='W';}
           else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
           else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-          else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
-          else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
+          else if(b.type==='bye'){cls='ball-bye';lbl='B'+(b.byeRuns||b.extra||'');}
+          else if(b.type==='legbye'){cls='ball-bye';lbl='LB'+(b.byeRuns||b.extra||'');}
           else if(b.runs===4){cls='ball-4';lbl='4';}
           else if(b.runs===6){cls='ball-6';lbl='6';}
           else if(b.runs>0){cls='ball-'+Math.min(b.runs,3);lbl=b.runs;}
@@ -1918,7 +1963,7 @@ function savePOTM(){
   const sel=document.getElementById('potm-sel');
   if(!sel)return;
   STATE.matches[DETAIL_IDX].potm=sel.value;
-  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).then(()=>{renderMatchDetail();}).catch(e=>alert('Save failed: '+e.message));
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards}).then(()=>{renderMatchDetail();}).catch(e=>alert('Save failed: '+e.message));
 }
 /* ── Inline ball edit modal ── */
 // openEditBallModal removed
@@ -1931,6 +1976,27 @@ function savePOTM(){
 
 
 /* ══ ADMIN: SQUAD EDITOR ══════════════════════════════════════════════════ */
+function renderAdminAwards(){
+  const c=document.getElementById('admin-awards-panel');
+  if(!c)return;
+  const awards=STATE.awards||{pott:'',bestBat:'',bestBowl:'',bestField:''};
+  const fields=[
+    {k:'pott',   l:'🏆 Player of the Tournament'},
+    {k:'bestBat', l:'🏏 Best Batter'},
+    {k:'bestBowl',l:'⚡ Best Bowler'},
+    {k:'bestField',l:'🧤 Best Fielder'}
+  ];
+  c.innerHTML=`<div style="background:white;border-radius:14px;border:1px solid var(--border);padding:1rem 1.1rem;margin-bottom:.8rem;box-shadow:0 2px 6px rgba(0,0,0,.05);">
+    <p style="font-size:.75rem;color:var(--gray);margin-bottom:.75rem;">Visible on Points page only after you save at least one name.</p>
+    ${fields.map(f=>`<div style="margin-bottom:.55rem;">
+      <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--gray);margin-bottom:.25rem;">${f.l}</div>
+      <input id="award-${f.k}" value="${awards[f.k]||''}" placeholder="Enter player name..." style="width:100%;padding:.48rem .7rem;border:1px solid var(--border);border-radius:8px;font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;" oninput="if(!STATE.awards)STATE.awards={};STATE.awards['${f.k}']=this.value">
+    </div>`).join('')}
+    <button class="btn-green" style="margin-top:.25rem;" onclick="saveAwards()">💾 Save Awards</button>
+    <div id="awards-flash" style="display:none;background:#dcfce7;color:#166534;border-radius:8px;padding:.4rem;text-align:center;font-size:.8rem;font-weight:600;margin-top:.4rem;"></div>
+  </div>`;
+}
+
 function renderAdminList(){
   const c=document.getElementById('admin-match-list');c.innerHTML='';
   const allTeams=[...GROUP_A,...GROUP_B];
@@ -1976,12 +2042,12 @@ function setKnockoutTeam(idx,field,value){
     m.innings[1].team=m.team2||'';
   }
   renderAdminList();
-  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(console.warn);
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards}).catch(console.warn);
   renderMatches();renderPoints();
 }
 function setMatchOvers(idx,overs){
   STATE.matches[idx].overs=overs;
-  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(console.warn);
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards}).catch(console.warn);
 }
 function resetMatch(idx){
   const m=STATE.matches[idx];
@@ -1999,7 +2065,7 @@ function confirmResetMatch(idx){
   const def=freshMatch(m.label,m.team1,m.team2,m.isFinal);
   def.overs=savedOvers;
   STATE.matches[idx]=def;
-  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION})
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards})
     .then(()=>{renderAdminList();renderMatches();renderPoints();renderStats();})
     .catch(e=>{
       document.getElementById('sc-modal-body').innerHTML=`<div class="sc-modal-title">❌ Reset Failed</div><p style="font-size:.85rem;color:#94a3b8;margin-bottom:.75rem;">${e.message}</p><button class="sc-modal-cancel" onclick="closeModal()">Close</button>`;
@@ -2030,9 +2096,18 @@ function renderSquadPlayers(ti,squad){
 function addPlayer(ti){STATE.squads[ti].players.push({name:'',captain:false});renderSquadPlayers(ti,STATE.squads[ti]);}
 function removePlayer(ti,pi){STATE.squads[ti].players.splice(pi,1);renderSquadPlayers(ti,STATE.squads[ti]);}
 function toggleCaptain(ti,pi){STATE.squads[ti].players.forEach((p,i)=>p.captain=i===pi);renderSquadPlayers(ti,STATE.squads[ti]);}
+async function saveAwards(){
+  try{
+    await pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards});
+    renderPoints();
+    const f=document.getElementById('awards-flash');
+    if(f){f.textContent='✅ Awards saved!';f.style.display='block';setTimeout(()=>f.style.display='none',2500);}
+  }catch(e){alert('Save failed: '+e.message);}
+}
+
 async function saveSquads(){
   try{
-    await pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION});
+    await pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards});
     renderTeams();
     const f=document.getElementById('squad-flash');
     f.textContent='✅ Squads saved!';f.style.display='block';
@@ -2129,8 +2204,8 @@ function renderScorer(){
     if(b.type==='wicket'){cls='ball-w';lbl='W';}
     else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
     else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-    else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
-    else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
+    else if(b.type==='bye'){cls='ball-bye';lbl='B'+(b.byeRuns||b.extra||'');}
+    else if(b.type==='legbye'){cls='ball-bye';lbl='LB'+(b.byeRuns||b.extra||'');}
     else if(b.runs===4){cls='ball-4';lbl='4';}
     else if(b.runs===6){cls='ball-6';lbl='6';}
     else if(b.runs>0){cls='ball-'+Math.min(b.runs,3);lbl=b.runs;}
@@ -2299,8 +2374,8 @@ function renderOverDone(body,m,inn){
     if(b.type==='wicket'){cls='ball-w';lbl='W';}
     else if(b.type==='wide'){cls='ball-wd';lbl='Wd';}
     else if(b.type==='noball'){cls='ball-nb';lbl='NB';}
-    else if(b.type==='bye'){cls='ball-dot';lbl='B'+(b.byeRuns||b.extra||'');}
-    else if(b.type==='legbye'){cls='ball-dot';lbl='LB'+(b.byeRuns||b.extra||'');}
+    else if(b.type==='bye'){cls='ball-bye';lbl='B'+(b.byeRuns||b.extra||'');}
+    else if(b.type==='legbye'){cls='ball-bye';lbl='LB'+(b.byeRuns||b.extra||'');}
     else if(b.runs===4){cls='ball-4';lbl='4';}
     else if(b.runs===6){cls='ball-6';lbl='6';}
     else if(b.runs>0){cls='ball-1';lbl=b.runs;}
@@ -2446,10 +2521,10 @@ function _completeMatch(m,r0,r1,w1){
   document.body.style.overflow='';
   setTimeout(()=>openMatchDetailAdmin(SCORER_IDX),200);
   // Push to cloud in background
-  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(e=>{
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards}).catch(e=>{
     console.warn('Cloud push failed after finalise:',e);
     // Retry once after 3s
-    setTimeout(()=>pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(console.warn),3000);
+    setTimeout(()=>pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards}).catch(console.warn),3000);
   });
 }
 
@@ -2839,7 +2914,7 @@ function autoSave(immediate=false){
   clearTimeout(_autoSaveTimer);
   const delay=immediate?0:2000;
   _autoSaveTimer=setTimeout(()=>{
-    pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION}).catch(console.warn);
+    pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards}).catch(console.warn);
   },delay);
 }
 
@@ -2888,7 +2963,9 @@ async function fetchFromCloud(){
         // Cloud squads are up to date — use them (allows admin edits to persist)
         STATE.squads=TEAM_CONFIG.map(tc=>{
           const cs=data.squads.find(s=>s.team===tc.name);
-          return(cs&&cs.players&&cs.players.length)?cs:makeSquad(tc.name);
+          // Only use cloud squad if it has at least one real (non-TBD) player name
+          const hasRealPlayers=cs&&cs.players&&cs.players.some(p=>p.name&&p.name.trim()&&p.name!=='TBD');
+          return hasRealPlayers?cs:makeSquad(tc.name);
         });
       } else {
         // Cloud has no squads yet — use local defaults but don't auto-push
@@ -2896,6 +2973,7 @@ async function fetchFromCloud(){
         STATE.squads=JSON.parse(JSON.stringify(DEFAULT_SQUADS));
       }
     }catch(squadErr){console.warn('Squad merge error:',squadErr);}
+    if(data.awards)STATE.awards={pott:data.awards.pott||'',bestBat:data.awards.bestBat||'',bestBowl:data.awards.bestBowl||'',bestField:data.awards.bestField||''};
     syncOk=true;
   }catch(e){
     console.warn("Fetch failed:",e);
@@ -3258,7 +3336,7 @@ function doLogin(){
     _fetchLock=true; // Pause auto-fetch while admin is active
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').classList.add('visible');
-    renderAdminList();renderAdminSquads();
+    renderAdminList();renderAdminSquads();renderAdminAwards();renderAdminAwards();
   }else{document.getElementById('login-err').style.display='block';document.getElementById('pwd-input').value='';}
 }
 function confirmResetData(){
@@ -3268,7 +3346,7 @@ function confirmResetData(){
   STATE.matches=JSON.parse(JSON.stringify(DEFAULT_MATCHES));
   STATE.squads=JSON.parse(JSON.stringify(DEFAULT_SQUADS));
   // Push clean data to cloud
-  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION})
+  pushToCloud({matches:STATE.matches,squads:STATE.squads,squadVersion:SQUAD_VERSION,awards:STATE.awards})
     .then(()=>{
       alert('✅ Data reset! All scores cleared, squads restored to defaults.');
       renderAdminList();renderAdminSquads();
